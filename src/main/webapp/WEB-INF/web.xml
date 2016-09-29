@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5">
+  <servlet>
+    <servlet-name>SoapService</servlet-name>
+    <servlet-class>p.ws.SoapService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SoapService</servlet-name>
+    <url-pattern>/ws/SoapService</url-pattern>
+  </servlet-mapping>
+</web-app>

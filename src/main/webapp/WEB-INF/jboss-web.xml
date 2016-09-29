@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jboss-web>
+    <!--
+    This explicitly sets the context root. Without this, the context root
+    would be the name of the deployment file. Ex: webapp.war would make
+    the context root webapp (http://localhost:8080/webapp)
+    -->
+    <context-root>/p</context-root>
+</jboss-web>
