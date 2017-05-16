@@ -1,15 +1,212 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!--
-The above doctype declaration tells IE to use strict mode instead of quirks mode. See:
-http://stackoverflow.com/questions/1747272/getting-rid-of-jquery-css-ie-slideup-flash
--->
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
-    <title>WebApp</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Database Request</title>
+    
+    <!-- Link in stylesheets -->
+    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.4.custom/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
 </head>
 <body>
-    It works!
+    <div id="title" class="title">Database Systems - Database Request 0.7</div>
+    <div class="body">
+        <div id="welcomePanel" class="panel">
+            <div class="panelTitle">Welcome</div>
+            <div class="panelBody">
+                <center><b>Database Request Form</b></center>
+                <br>
+                This form will automatically generate an HPSM Incident ticket for DB2 LUW, DB2 z/OS, Microsoft, Oracle and Teradata database requests.<br>
+                <br>Be aware of the following:
+                <ul>
+                    <li>Use source control (PVCS, TFS) for your application, and keep your DDL in that location.</li>
+                    <li>After your database is created, have your SPOC submit an NSCARS request for users / system accounts that need access, and the permissions that they need.</li>
+                    <li>
+                        If your request is for DB2, Microsoft, or Oracle:
+                        <ul>
+                        <li>Passwords will expire every 45 days unless a variance exists.</li>
+                        <li>Users are typically granted <b>select, insert, update, delete</b> in Test/QA</li>
+                        <li>Only <b>select</b> is granted in production. Use a firecall change ticket for write access in production.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <center><input id="welcomeNextButton" type="button" value="Next" /></center>
+            </div>
+        </div>
+        <div id="informationPanel" class="panel" style="display: none;">
+            <div class="panelTitle">Information</div>
+            <div class="panelBody" style="display: flex; flex-direction: column;">
+                <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+                    <div class="miniPanel">
+                        <div class="miniPanelTitle">Project Information</div>
+                        <div class="miniPanelBody">
+                            <table style="width: 100%;" border="0">
+                                <tr><td colspan="2"><input id="fld-applicationName" type="text" maxlength="50" placeholder="Application name" /></td></tr>
+                                <tr><td colspan="2"><input id="fld-projectNumber" type="text" maxlength="50" placeholder="PMO project number" /></td></tr>
+                                <tr><td colspan="2"><input id="fld-racf" type="text" maxlength="50" placeholder="Your RACF" /></td></tr>
+                                <tr><td colspan="2"><input id="fld-managerRacf" type="text" maxlength="50" placeholder="Manager's RACF" /></td></tr>
+                                <tr><td colspan="2"><input id="fld-group" type="text" maxlength="50" placeholder="Group / area" /></td></tr>
+                                <tr>
+                                    <td>Criticality</td>
+                                    <td>
+                                        <select id="fld-criticality">
+                                            <option value="None" selected>None</option>
+                                            <option value="Transportation (Low)">Transportation (Low)</option>
+                                            <option value="Transportation (Medium)">Transportation (Medium)</option>
+                                            <option value="Transportation (High)">Transportation (High)</option>
+                                            <option value="Transportation (Critical)">Transportation (Critical)</option>
+                                            <option value="Infrastructure (Low)">Infrastructure (Low)</option>
+                                            <option value="Infrastructure (Medium)">Infrastructure (Medium)</option>
+                                            <option value="Infrastructure (High)">Infrastructure (High)</option>
+                                            <option value="Infrastructure (Critical)">Infrastructure (Critical)</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>External facing</td>
+                                    <td><input id="fld-external" type="checkbox"></td>
+                                </tr>
+                                <tr>
+                                    <td>DR needed?</td>
+                                    <td><input id="fld-dr" type="checkbox"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="miniPanel">
+                        <div class="miniPanelTitle">Database Information</div>
+                        <div class="miniPanelBody">
+                            <table style="width: 100%;" border="0">
+                                <tr>
+                                    <td colspan="2"><input id="fld-databaseName" type="text" maxlength="50" placeholder="Database name" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Type</td>
+                                    <td>
+                                        <select id="fld-dbtype">
+                                            <option value="Microsoft SQL 2008" selected>Microsoft SQL 2008</option>
+                                            <option value="Microsoft SQL 2014">Microsoft SQL 2014</option>
+                                            <option value="Microsoft SQL 2016">Microsoft SQL 2016</option>
+                                            <option value="Oracle">Oracle</option>
+                                            <option value="Teradata">Teradata</option>
+                                            <option value="DB2 LUW (AIX)">DB2 LUW (AIX)</option>
+                                            <option value="DB2zOS">DB2zOS</option>
+                                            <option value="MySQL">MySQL</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Usage</td>
+                                    <td>
+                                        <select id="fld-usage">
+                                            <option value="OLTP" selected>OLTP</option>
+                                            <option value="DSS">DSS</option>
+                                            <option value="Mixed">Mixed</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Source control</td>
+                                    <td>
+                                        <select id="fld-sourcecontrol">
+                                            <option value="TFS" selected>TFS</option>
+                                            <option value="PVCS">PVCS</option>
+                                            <option value="Changeman">Changeman</option>
+                                            <option value="None">None</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Data</td>
+                                    <td>
+                                        <select id="fld-dataclass">
+                                            <option value="Public" selected>Public</option>
+                                            <option value="Restricted">Restricted</option>
+                                            <option value="Confidential">Confidential</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                    <td>Users</td> 
+                                    <td>
+                                        <select id="fld-usercount">
+                                            <option value="0-100" selected>0-100</option>
+                                            <option value="100-300">100-300</option>
+                                            <option value="300+">300+</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Features</td>
+                                    <td>
+                                        <select id="fld-features">
+                                            <option value="None" selected>None</option>
+                                            <option value="Purescale">Purescale</option>
+                                            <option value="BLU">BLU</option>
+                                            <option value="Partitioning">Partitioning</option>
+                                            <option value="Spacial (licensed)">Spacial (licensed)</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Annual growth</td>
+                                    <td><input id="fld-growth" type="number" value="1" min="1" max="99" /> <input type="radio" name="growth" value="MB" checked>MB <input type="radio" name="growth" value="GB">GB</td>
+                                </tr>
+                                <tr>
+                                    <td>Retention</td>
+                                    <td><input id="fld-retention" type="number" value="1" min="1" max="99" /> <input type="radio" name="retention" value="Month" checked>Month <input type="radio" name="retention" value="Year"> Year</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><div id="envMsg" style="padding: 10px;">Select the environments you need and the date you need them by. Allow us at least 10 days to provide each environment.</div></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <table style="width: 100%;" border="0">
+                                            <tr>
+                                                <td>Test <input id="fld-envte" type="checkbox"></td>
+                                                <td>Size <input id="fld-dbsizeT" type="number" value="1" min="1" max="99" /> <input type="radio" name="sizete" value="MB" checked>MB <input type="radio" name="sizete" value="GB">GB</td>
+                                                <td><input id="fld-teDate" type="text" maxlength="10" size="10" readonly /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>QA <input id="fld-envqa" type="checkbox"></td>
+                                                <td>Size <input id="fld-dbsizeQ" type="number" value="1" min="1" max="99" /> <input type="radio" name="sizeqa" value="MB" checked>MB <input type="radio" name="sizeqa" value="GB">GB</td>
+                                                <td><input id="fld-qaDate" type="text" maxlength="10" size="10" readonly /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Prod <input id="fld-envpr" type="checkbox"></td>
+                                                <td>Size <input id="fld-dbsizeP" type="number" value="1" min="1" max="99" /> <input type="radio" name="sizepr" value="MB" checked>MB <input type="radio" name="sizepr" value="GB">GB</td>
+                                                <td><input id="fld-prDate" type="text" maxlength="10" size="10" readonly /></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="miniPanel">
+                    <div class="miniPanelTitle">Submit Request</div>
+                    <div class="miniPanelBody" style="text-align: center;">
+                        <br>
+                        When you are ready, click the button to submit the database request.
+                        <br><br>
+                        <input id="submitButton" type="button" value="Submit" />
+                        <img id="submitLoading" src="images/loading.gif" width="50" style="display: none;"/>
+                        <br><br>
+                        <span id="statusbar" class="statusbar"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer" class="footer"></div>
+    
+    <!-- Link scripts -->
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/moment.min.js"></script>
+    <script type="text/javascript" src="js/app/settings.js"></script>
+    <script type="text/javascript" src="js/app/main.js"></script>
 </body>
 </html>
