@@ -18,18 +18,18 @@ public class Main {
     
     public static void main(String[] args) throws Exception {
         // Web service: http://www.webservicex.net/globalweather.asmx?op=GetCitiesByCountry
-        String data = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\"><soap12:Body><GetCitiesByCountry xmlns=\"http://www.webserviceX.NET\"><CountryName>United States</CountryName></GetCitiesByCountry></soap12:Body></soap12:Envelope>";
+        String soap_request = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\"><soap12:Body><GetCitiesByCountry xmlns=\"http://www.webserviceX.NET\"><CountryName>United States</CountryName></GetCitiesByCountry></soap12:Body></soap12:Envelope>";
         
         URL url = new URL("http://www.webservicex.net/globalweather.asmx");
         HttpURLConnection con = (HttpURLConnection)url.openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("Content-Type", "text/xml");
         con.setRequestProperty("charset", "UTF-8");
-        con.setRequestProperty("Content-Length", String.valueOf(data.length()));
+        con.setRequestProperty("Content-Length", String.valueOf(soap_request.length()));
         
         con.setDoOutput(true);
         OutputStream out = con.getOutputStream();
-        IOUtils.write(data, out, "UTF-8");
+        IOUtils.write(soap_request, out, "UTF-8");
         out.flush();
         IOUtils.closeQuietly(out);
         
