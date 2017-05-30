@@ -1,4 +1,4 @@
-# javalab
+# Web Application
 This includes:
 - Gradle build and package as WAR file
 - Get dependencies from Maven
