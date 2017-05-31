@@ -128,8 +128,9 @@ app.submitRequest = function() {
     $("#submitLoading").show();
     
     $.ajax({
-        type: "POST",
-        url: "/Server/DBRequest.aspx",
+        method: "POST",
+        url: "dbrequest",
+        timeout: 15000,
         data: {
             ts: new Date().getTime(),
             applicationName: applicationName,

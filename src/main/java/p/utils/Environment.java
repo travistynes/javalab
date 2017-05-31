@@ -1,4 +1,4 @@
-package p.servlet;
+package p.utils;
 
 import javax.servlet.http.*;
 import javax.servlet.ServletConfig;
@@ -19,14 +19,12 @@ servlets with a larger value. init and destroy will be called on deploy/undeploy
 public class Environment extends HttpServlet {    
     public enum TYPE {
         UNKNOWN,
-        TEST,
-        QA,
+        DEV,
         PROD
     }
     
     private static Logger log = Logger.getLogger(Environment.class);
     public static Environment.TYPE ENV = Environment.TYPE.UNKNOWN;
-    public static String DNS_ALIAS = System.getProperty("system.alias");
     public static long DEPLOY_TIME = System.currentTimeMillis();
     
     /*
@@ -35,14 +33,12 @@ public class Environment extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         log.info("Application started.");
         
-        String e = System.getProperty("system.type"); // One of: not set (null), TEST, QA, PROD.
+        String e = System.getProperty("system.type"); // One of: not set (null), DEV, PROD.
         if(e == null) {
             log.info("system.type is not set; unknown environment.");
             Environment.ENV = Environment.TYPE.UNKNOWN;
-        } else if(e.equalsIgnoreCase("TEST")) {
-            Environment.ENV = Environment.TYPE.TEST;
-        } else if(e.equalsIgnoreCase("QA")) { 
-            Environment.ENV = Environment.TYPE.QA;
+        } else if(e.equalsIgnoreCase("DEV")) {
+            Environment.ENV = Environment.TYPE.DEV;
         } else if(e.equalsIgnoreCase("PROD")) {
             Environment.ENV = Environment.TYPE.PROD;
         } else {
@@ -57,7 +53,6 @@ public class Environment extends HttpServlet {
     /*
     Called when servlet is destroyed (on undeployment).
     */
-    @Override
     public void destroy() {
         log.info("Application shutdown.");
     }

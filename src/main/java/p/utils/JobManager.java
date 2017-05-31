@@ -1,4 +1,4 @@
-package p.servlet;
+package p.utils;
 
 import javax.servlet.http.*;
 import javax.servlet.ServletConfig;
@@ -16,7 +16,8 @@ import org.apache.log4j.Logger;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 
 @WebServlet (
-    loadOnStartup=2
+    loadOnStartup=2,
+    urlPatterns = {"/jobs"} // Tomcat doesn't seem to init the servlet without urlPatterns set...?
 )
 public class JobManager extends HttpServlet {
     private static Logger log = Logger.getLogger(JobManager.class);
@@ -25,7 +26,6 @@ public class JobManager extends HttpServlet {
     /*
     Called on servlet initialization (on deployment).
     */
-    @Override
     public void init(ServletConfig config) throws ServletException {
         try {
             log.info("Job manager initializing.");
@@ -48,7 +48,6 @@ public class JobManager extends HttpServlet {
     /*
     Called when servlet is destroyed (on undeployment).
     */
-    @Override
     public void destroy() throws RuntimeException {
         try {
             log.info("Job manager shutting down.");

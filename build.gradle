@@ -28,3 +28,22 @@ dependencies {
     // Local compile time dependencies.
     compile fileTree(dir: "lib", include: "**/*.jar")
 }
+
+task deploy(type: Copy, dependsOn: ["build"]) {
+    from war.archivePath
+    into "${tomcat_home}/webapps"
+}
+
+task undeploy(type: Delete) {
+    delete "${tomcat_home}/webapps/${war.archiveName}"
+}
+
+task start_tomcat(type: Exec) {
+    workingDir "${tomcat_home}/bin"
+    commandLine "./startup.sh"
+}
+
+task stop_tomcat(type: Exec) {
+    workingDir "${tomcat_home}/bin"
+    commandLine "./shutdown.sh"
+}

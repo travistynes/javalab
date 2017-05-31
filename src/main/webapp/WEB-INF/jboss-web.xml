@@ -5,5 +5,5 @@
     would be the name of the deployment file. Ex: webapp.war would make
     the context root webapp (http://localhost:8080/webapp)
     -->
-    <context-root>/p</context-root>
+    <context-root>/webapp</context-root>
 </jboss-web>

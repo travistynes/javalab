@@ -12,8 +12,12 @@ import org.apache.log4j.Logger;
 
 /**
  * See the entry in WEB-INF/web.xml. It is required to make the web service available.
- * WSDL url: http://localhost:8080/p/ws/SoapService?wsdl
+ * WSDL url: http://localhost:8080/webapp/ws/SoapService?wsdl
+ * 
+ * For SOAP web services to be deployed and available they must be deployed on a
+ * JavaEE compliant application server, ie. Apache TomEE.
  */
+@Stateless
 @WebService (
     name = "SoapService",
     serviceName = "SoapService",
@@ -21,7 +25,7 @@ import org.apache.log4j.Logger;
 )
 @HandlerChain(file="soap_handler.xml")
 public class SoapService {
-    private static Logger log = Logger.getLogger("service");
+    private static Logger log = Logger.getLogger(SoapService.class);
     
     @WebMethod
     public Wrapper getTime(String s) {
@@ -43,7 +47,7 @@ public class SoapService {
         }
     }
     
-    private static class Wrapper {
+    public static class Wrapper {
         public String request;
         public String ts;
     }
