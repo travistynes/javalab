@@ -1,0 +1,171 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Example Database Request Form</title>
+    
+    <!-- Link Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+    
+    <!-- Link in stylesheets -->
+    <link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.4.custom/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body ng-app="app" ng-controller="main">
+    <div id="title" class="title">Database Systems - Database Request 1.0</div>
+    <div class="body">
+        <div id="welcomePanel" class="panel">
+            <div class="panelTitle">Welcome</div>
+            <div class="panelBody">
+                <center><b>Database Request Form</b></center>
+                <br>
+                This form will automatically generate an HPSM Incident ticket for DB2 LUW, DB2 z/OS, Microsoft, Oracle and Teradata database requests.<br>
+                <br>Be aware of the following:
+                <ul>
+                    <li>Use source control (PVCS, TFS) for your application, and keep your DDL in that location.</li>
+                    <li>After your database is created, have your SPOC submit an NSCARS request for users / system accounts that need access, and the permissions that they need.</li>
+                    <li>
+                        If your request is for DB2, Microsoft, or Oracle:
+                        <ul>
+                        <li>Passwords will expire every 45 days unless a variance exists.</li>
+                        <li>Users are typically granted <b>select, insert, update, delete</b> in Test/QA</li>
+                        <li>Only <b>select</b> is granted in production. Use a firecall change ticket for write access in production.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <center><input id="welcomeNextButton" type="button" value="Next" ng-click="welcomeNextButton_click()" /></center>
+            </div>
+        </div>
+        <div id="informationPanel" class="panel" style="display: none;">
+            <div class="panelTitle">Information</div>
+            <div class="panelBody" style="display: flex; flex-direction: column;">
+                <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+                    <div class="miniPanel">
+                        <div class="miniPanelTitle">Project Information</div>
+                        <div class="miniPanelBody">
+                            <table style="width: 100%;" border="0">
+                                <tr><td colspan="2"><input ng-model="applicationName" type="text" maxlength="50" placeholder="Application name" /></td></tr>
+                                <tr><td colspan="2"><input ng-model="projectNumber" type="text" maxlength="50" placeholder="PMO project number" /></td></tr>
+                                <tr><td colspan="2"><input ng-model="racf" type="text" maxlength="50" placeholder="Your RACF" /></td></tr>
+                                <tr><td colspan="2"><input ng-model="managerRacf" type="text" maxlength="50" placeholder="Manager's RACF" /></td></tr>
+                                <tr><td colspan="2"><input ng-model="group" type="text" maxlength="50" placeholder="Group / area" /></td></tr>
+                                <tr>
+                                    <td>Criticality</td>
+                                    <td>
+                                        <select ng-model="criticality" ng-init="criticality = criticalities[0]" ng-options="x for x in criticalities"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>External facing</td>
+                                    <td><input id="fld-external" type="checkbox" ng-model="external" ng-init="external=false"></td>
+                                </tr>
+                                <tr>
+                                    <td>DR needed?</td>
+                                    <td><input id="fld-dr" type="checkbox" ng-model="dr" ng-init="dr=false"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="miniPanel">
+                        <div class="miniPanelTitle">Database Information</div>
+                        <div class="miniPanelBody">
+                            <table style="width: 100%;" border="0">
+                                <tr>
+                                    <td colspan="2"><input ng-model="databaseName" type="text" maxlength="50" placeholder="Database name" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Type</td>
+                                    <td>
+                                        <select ng-model="dbtype" ng-init="dbtype = dbtypes[0]" ng-options="x for x in dbtypes" ng-change="dbtypeChange()"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Usage</td>
+                                    <td>
+                                        <select id="fld-usage" ng-model="usage" ng-init="usage = usages[0]" ng-options="x for x in usages"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Source control</td>
+                                    <td>
+                                        <select id="fld-sourcecontrol" ng-model="sourcecontrol" ng-init="sourcecontrol = sourcecontrols[0]" ng-options="x for x in sourcecontrols"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Data</td>
+                                    <td>
+                                        <select ng-model="dataclass" ng-init="dataclass = dataclasses[0]" ng-options="x for x in dataclasses"></select>
+                                    </td>
+                                </tr>
+                                    <td>Users</td> 
+                                    <td>
+                                        <select ng-model="usercount" ng-init="usercount = usercounts[0]" ng-options="x for x in usercounts"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Features</td>
+                                    <td>
+                                        <select ng-model="features" ng-init="features = featurelist[0]" ng-options="x for x in featurelist"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Annual growth</td>
+                                    <td><input ng-model="growth" type="number" min="1" max="99" /> <input type="radio" ng-model="growthUnit" value="MB">MB <input type="radio" ng-model="growthUnit" value="GB">GB</td>
+                                </tr>
+                                <tr>
+                                    <td>Retention</td>
+                                    <td><input ng-model="retention" type="number" min="1" max="99" /> <input type="radio" ng-model="retentionUnit" value="Month">Month <input type="radio" ng-model="retentionUnit" value="Year"> Year</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><div id="envMsg" style="padding: 10px;">Select the environments you need and the date you need them by. Allow us at least 10 days to provide each environment.</div></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <table style="width: 100%;" border="0">
+                                            <tr>
+                                                <td>Test <input  ng-model="envte" type="checkbox"></td>
+                                                <td>Size <input ng-model="dbsizeT" type="number" min="1" max="99" /> <input type="radio" ng-model="sizete" value="MB">MB <input type="radio" ng-model="sizete" value="GB">GB</td>
+                                                <td><input id="fld-teDate" type="text" maxlength="10" size="10" readonly /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>QA <input ng-model="envqa" type="checkbox"></td>
+                                                <td>Size <input ng-model="dbsizeQ" type="number" min="1" max="99" /> <input type="radio" ng-model="sizeqa" value="MB">MB <input type="radio" ng-model="sizeqa" value="GB">GB</td>
+                                                <td><input id="fld-qaDate" type="text" maxlength="10" size="10" readonly /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Prod <input ng-model="envpr" type="checkbox"></td>
+                                                <td>Size <input ng-init="dbsizeP" type="number" min="1" max="99" /> <input type="radio" ng-model="sizepr" value="MB">MB <input type="radio" ng-model="sizepr" value="GB">GB</td>
+                                                <td><input id="fld-prDate" type="text" maxlength="10" size="10" readonly /></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="miniPanel">
+                    <div class="miniPanelTitle">Submit Request</div>
+                    <div class="miniPanelBody" style="text-align: center;">
+                        <br>
+                        When you are ready, click the button to submit the database request.
+                        <br><br>
+                        <input id="submitButton" type="button" value="Submit" ng-click="submitRequest()" />
+                        <img id="submitLoading" src="images/loading.gif" width="50" style="display: none;"/>
+                        <br><br>
+                        <span id="statusbar" class="statusbar"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer" class="footer" ng-bind="footer"></div>
+    
+    <!-- Link scripts -->
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/moment.min.js"></script>
+    <script type="text/javascript" src="js/app/angular/main.js"></script>
+</body>
+</html>
