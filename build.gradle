@@ -13,9 +13,13 @@ repositories {
 
 dependencies {
     // External compile time dependencies
-    compile(
-        [group: "commons-io", name: "commons-io", version: "2.5"],
-        [group: "log4j", name: "log4j", version: "1.2.17"]
+    compile (
+        "commons-io:commons-io:2.5",
+        "log4j:log4j:1.2.17"
+    )
+    
+    testCompile (
+        "junit:junit:4.12"
     )
     
     // Local compile time dependencies.
