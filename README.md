@@ -1,5 +1,5 @@
 # Spring Boot
-Spring web application (stand alone). See: [spring.io guide](https://spring.io/guides/gs/spring-boot/)
+Spring web application (stand alone). See: [spring.io guide](https://spring.io/guides/gs/spring-boot/). The full reference can be [found here](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/).
 
 **Build**
 
