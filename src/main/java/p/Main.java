@@ -9,7 +9,7 @@ public class Main {
         
     }
     
-    public boolean truthtest(boolean b) {
+    public static boolean truthtest(boolean b) {
         return b;
     }
 }
