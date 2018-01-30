@@ -1,7 +1,6 @@
 package p.jms;
 
 import javax.jms.ConnectionFactory;
-import org.apache.activemq.command.ActiveMQMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
