@@ -1,7 +1,15 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
+    }
+}
+
 apply plugin: "java"
-apply plugin: "application" // Use with 'gradle run' to compile and run application
-apply plugin: "distribution" // Use with 'gradle distZip'
-mainClassName = "p.Main"
+apply plugin: "war"
+apply plugin: 'org.springframework.boot'
 
 version = "0.1"
 sourceCompatibility = 1.8
@@ -14,24 +22,13 @@ repositories {
 dependencies {
     // External compile time dependencies
     compile (
-        "commons-io:commons-io:2.5",
-        "log4j:log4j:1.2.17"
-    )
-    
-    testCompile (
-        "junit:junit:4.12"
+        "org.postgresql:postgresql:42.1.4",
+        "org.springframework.boot:spring-boot-starter-web",
+        "org.springframework:spring-jdbc",
+        "org.springframework.boot:spring-boot-starter-activemq",
+        "org.apache.tomcat:tomcat-jdbc:9.0.2" // Use Tomcat JDBC connection pool (others are dbcp2, c3p0, hikari, etc)
     )
     
     // Local compile time dependencies.
     compile fileTree(dir: "lib", include: "**/*.jar")
-}
-
-// Create a single jar for distribution that includes all dependencies inside the jar.
-task dist(type: Jar) {
-    manifest {
-        attributes "Implementation-Title": "Lib Example", "Implementation-Version": version, "Main-Class": "p.Main"
-    }
-    baseName "MyLib"
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
