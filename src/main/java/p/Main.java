@@ -8,9 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -22,7 +19,6 @@ import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
 
 @SpringBootApplication
-@RestController
 @EnableJms
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -53,14 +49,8 @@ public class Main {
     private void init() {
         log.info("Init.");
         
-        dbquery();
         
         log.info("Done.");
-    }
-    
-    @RequestMapping("/hello")
-    public void hello(@RequestParam(value="name") String name) {
-        log.info("Access: " + name);
     }
     
     private void dbquery() {
