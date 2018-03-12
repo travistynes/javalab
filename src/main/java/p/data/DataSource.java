@@ -32,13 +32,24 @@ public class DataSource {
     }
     
     @Bean
-    @Primary // Mark as default bean for @Autowired when there are multiple bean candidates.
-    public JdbcTemplate db1(@Qualifier("ds1") javax.sql.DataSource ds1) {
-        return new JdbcTemplate(ds1);
+    @ConfigurationProperties(prefix="db.ora.dev")
+    public javax.sql.DataSource oracleDS() {
+        return DataSourceBuilder.create().build();
     }
     
     @Bean
-    public JdbcTemplate db2(@Qualifier("ds2") javax.sql.DataSource ds1) {
-        return new JdbcTemplate(ds1);
+    @Primary // Mark as default bean for @Autowired when there are multiple bean candidates.
+    public JdbcTemplate db1(@Qualifier("ds1") javax.sql.DataSource ds) {
+        return new JdbcTemplate(ds);
+    }
+    
+    @Bean
+    public JdbcTemplate db2(@Qualifier("ds2") javax.sql.DataSource ds) {
+        return new JdbcTemplate(ds);
+    }
+    
+    @Bean
+    public JdbcTemplate oracleDev(@Qualifier("oracleDS") javax.sql.DataSource ds) {
+        return new JdbcTemplate(ds);
     }
 }

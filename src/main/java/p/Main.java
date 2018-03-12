@@ -6,6 +6,10 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,6 +33,9 @@ public class Main {
     @Resource(name="db2")
     JdbcTemplate db2;
     
+    @Resource(name="oracleDev")
+    JdbcTemplate ora;
+    
     @Autowired
     A a;
     
@@ -48,6 +55,7 @@ public class Main {
     @PostConstruct
     private void init() {
         log.info("Init.");
+        
         
         
         log.info("Done.");
