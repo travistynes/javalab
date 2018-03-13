@@ -8,8 +8,4 @@ public class Main {
     public static void main(String[] args) throws Exception {
         
     }
-    
-    public static boolean truthtest(boolean b) {
-        return b;
-    }
 }
