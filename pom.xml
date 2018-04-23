@@ -43,7 +43,7 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<!-- Run application locally with: $ mvn exec:exec -->
+				<!-- Run application locally with: $ mvn clean compile exec:exec -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.6.0</version>
@@ -55,8 +55,15 @@
 						<!-- Automatically creates the classpath using all project dependencies,
 						also adding the project build directory -->
 						<classpath/>
-						<argument>-Dsystem.property=val1</argument>
+						
+						<!-- System properties available with System.getProperty() -->
+						<argument>-Dsystem.property1=value1</argument>
+						<argument>-Dsystem.property2=value2</argument>
+						
+						<!-- Main class -->
 						<argument>p.Main</argument>
+						
+						<!-- Arguments to main() -->
 						<argument>arg1</argument>
 						<argument>arg2</argument>
 					</arguments>
