@@ -4,9 +4,9 @@ Spring boot with maven build.
 
 Run with:
 
-'''
+```
 $ mvn spring-boot:run
-'''
+```
 
 ## External configuration
 See: https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html
