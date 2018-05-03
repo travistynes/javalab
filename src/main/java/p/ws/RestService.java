@@ -12,69 +12,70 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @RestController
 public class RestService {
-    private static final Logger log = LoggerFactory.getLogger(RestService.class);
-    
-    /**
-     * Example rest service. 
-     */
-    @RequestMapping("/hello")
-    public String hello(@RequestParam(value="name", defaultValue="Unknown") String name) {
-        String s = "Hello, " + name;
-        log.info(s);
-        
-        return s;
-    }
-    
-    /**
-     * Example client calling rest service, converting JSON response to object.
-     */
-    @RequestMapping("/client")
-    public String client() {
-        RestTemplate rest = new RestTemplate();
-        
-        Quote q = rest.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
-        
-        log.info(q.toString());
-        
-        return q.toString();
-    }
-    
-    
-    private static class Quote {
-        private String type;
-        private Value value;
 
-        public void setType(String type) {
-            this.type = type;
-        }
+	private static final Logger log = LoggerFactory.getLogger(RestService.class);
 
-        public void setValue(Value value) {
-            this.value = value;
-        }
+	/**
+	 * Example rest service.
+	 */
+	@RequestMapping("/hello")
+	public String hello(@RequestParam(value = "name", defaultValue = "Unknown") String name) {
+		String s = "Hello, " + name;
+		log.info(s);
 
-        public String getType() {
-            return type;
-        }
+		return s;
+	}
 
-        public Value getValue() {
-            return value;
-        }
-        
-        public String toString() {
-            return "Type: " + type + ", Quote: " + value.quote;
-        }
-        
-        
-        private static class Value {
-            String quote;
+	/**
+	 * Example client calling rest service, converting JSON response to object.
+	 */
+	@RequestMapping("/client")
+	public String client() {
+		RestTemplate rest = new RestTemplate();
 
-            public void setQuote(String quote) {
-                this.quote = quote;
-            }
+		Quote q = rest.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
 
-            public String getQuote() {
-                return quote;
-            }
-        }
-    }
+		log.info(q.toString());
+
+		return q.toString();
+	}
+
+	private static class Quote {
+
+		private String type;
+		private Value value;
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public void setValue(Value value) {
+			this.value = value;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public Value getValue() {
+			return value;
+		}
+
+		public String toString() {
+			return "Type: " + type + ", Quote: " + value.quote;
+		}
+
+		private static class Value {
+
+			String quote;
+
+			public void setQuote(String quote) {
+				this.quote = quote;
+			}
+
+			public String getQuote() {
+				return quote;
+			}
+		}
+	}
 }

@@ -22,32 +22,33 @@ import org.springframework.context.annotation.Scope;
 
 @SpringBootApplication
 public class Main {
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
-    
-    @Resource(name="db1")
-    private JdbcTemplate jdbc;
-    
-    public static void main(String[] args) throws Exception {
-        log.info("Starting.");
-        SpringApplication.run(Main.class, args);
-        
-        log.info("Running.");
-    }
-    
-    /**
-     * Called after container has constructed the Main instance.
-     */
-    @PostConstruct
-    private void init() {
-        log.info("Init.");
-        
-       String ts = jdbc.queryForObject("select current_timestamp ts from dual", (rs, rn) -> {
-	       return rs.getString("ts");
-       }); 
-        
-       log.info("Connection to db good: " + ts);
 
-       log.info("Done.");
+	private static final Logger log = LoggerFactory.getLogger(Main.class);
 
-    }
+	@Resource(name = "db1")
+	private JdbcTemplate jdbc;
+
+	public static void main(String[] args) throws Exception {
+		log.info("Starting.");
+		SpringApplication.run(Main.class, args);
+
+		log.info("Running.");
+	}
+
+	/**
+	 * Called after container has constructed the Main instance.
+	 */
+	@PostConstruct
+	private void init() {
+		log.info("Init.");
+
+		String ts = jdbc.queryForObject("select current_timestamp ts from dual", (rs, rn) -> {
+			return rs.getString("ts");
+		});
+
+		log.info("Connection to db good: " + ts);
+
+		log.info("Done.");
+
+	}
 }
