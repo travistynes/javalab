@@ -2,3 +2,5 @@
 /logs
 /target
 *.swp
+tags
+.nb-gradle
