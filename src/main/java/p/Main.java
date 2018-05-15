@@ -3,6 +3,7 @@ package p;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,10 @@ public class Main {
 	private JdbcTemplate jdbc;
 
 	public static void main(String[] args) throws Exception {
-		log.info("Starting.");
+		log.info("Application starting.");
 		SpringApplication.run(Main.class, args);
 
-		log.info("Running.");
+		log.info("Application started.");
 	}
 
 	/**
@@ -40,7 +41,7 @@ public class Main {
 	 */
 	@PostConstruct
 	private void init() {
-		log.info("Init.");
+		log.info("Application created. Running post initialization.");
 
 		String ts = jdbc.queryForObject("select current_timestamp ts from dual", (rs, rn) -> {
 			return rs.getString("ts");
@@ -48,7 +49,14 @@ public class Main {
 
 		log.info("Connection to db good: " + ts);
 
-		log.info("Done.");
+		log.info("Initialization complete.");
+	}
 
+	/**
+	 * Shutdown hook.
+	 */
+	@PreDestroy
+	private void shutdown() {
+		log.info("Application shutdown.");
 	}
 }

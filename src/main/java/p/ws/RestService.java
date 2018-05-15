@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Configuration
 @RestController
@@ -30,16 +32,25 @@ public class RestService {
 	 * Example client calling rest service, converting JSON response to object.
 	 */
 	@RequestMapping("/client")
-	public String client() {
+	public String client() throws Exception {
 		RestTemplate rest = new RestTemplate();
 
-		Quote q = rest.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
+		// Get json response and convert to object.
+		// Commented out just to show capturing the raw json below.
+		//String q = rest.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
 
-		log.info(q.toString());
+		// Get raw json response.
+		String json = rest.getForObject("https://gturnquist-quoters.cfapps.io/api/random", String.class);
+		log.info(json);
+
+		// Convert json to Quote.
+		ObjectMapper om = new ObjectMapper();
+		Quote q = om.readValue(json, Quote.class);
 
 		return q.toString();
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	private static class Quote {
 
 		private String type;
@@ -65,6 +76,7 @@ public class RestService {
 			return "Type: " + type + ", Quote: " + value.quote;
 		}
 
+		@JsonIgnoreProperties(ignoreUnknown = true)
 		private static class Value {
 
 			String quote;
