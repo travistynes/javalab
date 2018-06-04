@@ -18,3 +18,15 @@ Spring loads properties from application.properties from the following locations
 4. The classpath root
 
 Properties defined in locations higher in the list override those defined in lower locations.
+
+## SSL
+To run the application locally with SSL enabled, generate a self-signed certificate:
+
+```
+keytool -genkeypair -alias my_alias -keyalg RSA -keysize 2048 -keystore javalab.jks -validity 3650
+```
+
+Enter keystore password: changeme
+Re-enter new password: changeme
+
+Copy the file to config/javalab.jks
