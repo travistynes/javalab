@@ -29,3 +29,14 @@ keytool -genkeypair -alias my_alias -keyalg RSA -keysize 2048 -keystore javalab.
 * Enter keystore password: changeme
 * Re-enter new password: changeme
 * Copy the file to config/javalab.jks
+
+Set the following properties in application.properties:
+
+```
+server.ssl.enabled=true
+server.ssl.key-store=config/javalab.jks
+server.ssl.key-store-password=changeme
+server.ssl.keyStoreType=JKS
+server.ssl.keyAlias=my_alias
+```
+
