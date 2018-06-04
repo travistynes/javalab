@@ -5,7 +5,7 @@ Spring boot with maven build.
 Run with:
 
 ```
-$ mvn spring-boot:run
+mvn spring-boot:run
 ```
 
 ## External configuration
