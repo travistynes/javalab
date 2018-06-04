@@ -26,7 +26,6 @@ To run the application locally with SSL enabled, generate a self-signed certific
 keytool -genkeypair -alias my_alias -keyalg RSA -keysize 2048 -keystore javalab.jks -validity 3650
 ```
 
-Enter keystore password: changeme
-Re-enter new password: changeme
-
-Copy the file to config/javalab.jks
+* Enter keystore password: changeme
+* Re-enter new password: changeme
+* Copy the file to config/javalab.jks
