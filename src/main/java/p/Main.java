@@ -43,7 +43,7 @@ public class Main {
 	private void init() {
 		log.info("Application created. Running post initialization.");
 
-		String ts = jdbc.queryForObject("select current_timestamp ts from dual", (rs, rn) -> {
+		String ts = jdbc.queryForObject("select current_timestamp ts", (rs, rn) -> {
 			return rs.getString("ts");
 		});
 

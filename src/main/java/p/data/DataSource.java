@@ -22,14 +22,14 @@ public class DataSource {
 
 	@Bean
 	@Primary
-	@ConfigurationProperties(prefix = "db.ora.dev")
-	public javax.sql.DataSource oracleDS() {
+	@ConfigurationProperties(prefix = "db.pg.dev")
+	public javax.sql.DataSource pgDS() {
 		return DataSourceBuilder.create().build();
 	}
 
 	@Bean
 	@Primary // Mark as default bean for @Autowired when there are multiple bean candidates.
-	public JdbcTemplate db1(@Qualifier("oracleDS") javax.sql.DataSource ds) {
+	public JdbcTemplate db1(@Qualifier("pgDS") javax.sql.DataSource ds) {
 		return new JdbcTemplate(ds);
 	}
 }
