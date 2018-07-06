@@ -9,14 +9,11 @@
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>logs/javalab.log</file>
 
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<!-- Rollover daily -->
-			<fileNamePattern>logs/javalab.%d{yyyyMMdd}.%i.log
-			</fileNamePattern>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>1MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-			<!-- Keep n day's worth of history -->
+			<fileNamePattern>logs/javalab.%d{yyyyMMdd}.%i.log</fileNamePattern>
+			<!-- Specify maximum file size and number of days worth of history to keep -->
+			<maxFileSize>1MB</maxFileSize>
 			<maxHistory>5</maxHistory>
 		</rollingPolicy>
 
@@ -30,3 +27,4 @@
 		<appender-ref ref="FILE" />
 	</root>
 </configuration>
+
