@@ -28,11 +28,15 @@ import java.sql.Date;
 import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.io.IOUtils;
 
 /**
  * The @ActiveProfile specifies the properties file that will be loaded.
  * When a profile is not set, it will default to the application.properties
  * and try to make connections to the external database.
+ *
+ * Classpath resources and files will be loaded from /src/main/resources, but will
+ * be overridden by those of the same name if they exist in /src/test/resources.
  */
 @RunWith(SpringRunner.class)
 @ActiveProfiles({"unittest"})
@@ -49,7 +53,7 @@ public class MainTest {
 	public void before() {
 		ResourceDatabasePopulator rdp = new ResourceDatabasePopulator();
 		rdp.addScripts(
-				new ClassPathResource("/sql/ddl.sql")
+				new ClassPathResource("sql/ddl.sql")
 			      );
 		rdp.execute(dataSource);
 	}
@@ -63,8 +67,10 @@ public class MainTest {
 	@Test
 	public void test1() throws Exception {
 		try(Connection c = dataSource.getConnection()) {
+			int msgs = 3, count = 0;
+
 			try(PreparedStatement ps = c.prepareStatement("insert into a (msg) values (?)")) {
-				for(int a = 0; a < 3; a++) {
+				for(int a = 0; a < msgs; a++) {
 					ps.setString(1, "Message " + a);
 					ps.executeUpdate();
 				}
@@ -73,8 +79,24 @@ public class MainTest {
 			try(PreparedStatement ps = c.prepareStatement("select msg, ts from a")) {
 				try(ResultSet rs = ps.executeQuery()) {
 					while(rs.next()) {
+						count++;
 						log.info(rs.getString("msg") + ": " +  rs.getString("ts"));
 					}
+				}
+			}
+
+			assertEquals(msgs, count);
+		}
+	}
+
+	@Test
+	public void test2() throws Exception {
+		try(Connection c = dataSource.getConnection()) {
+			String sql = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("sql/time.sql"), "UTF-8");
+
+			try(PreparedStatement ps = c.prepareStatement(sql)) {
+				try(ResultSet rs = ps.executeQuery()) {
+					assertTrue(rs.next());
 				}
 			}
 		}

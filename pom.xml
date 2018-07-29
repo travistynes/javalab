@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.2.RELEASE</version>
+		<version>2.0.3.RELEASE</version>
 	</parent>
 
 	<dependencies>
@@ -75,6 +75,7 @@
 				<!-- JDK paths specified in ~/.m2/toolchains.xml -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-toolchains-plugin</artifactId>
+				<version>1.1</version>
 				<executions>
 					<execution>
 						<goals>
