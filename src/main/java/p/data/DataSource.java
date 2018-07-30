@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Database access beans.
@@ -20,11 +21,17 @@ public class DataSource {
 
 	private static final Logger log = LoggerFactory.getLogger(DataSource.class);
 
+	@Value("${db.pg.dev.url}")
+	private String url;
+
 	@Bean
 	@Primary
 	@ConfigurationProperties(prefix = "db.pg.dev")
 	public javax.sql.DataSource pgDS() {
-		return DataSourceBuilder.create().build();
+		javax.sql.DataSource ds =  DataSourceBuilder.create().build();
+		log.info("Created data source: " + url);
+
+		return ds;
 	}
 
 	@Bean
