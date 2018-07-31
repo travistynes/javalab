@@ -65,7 +65,7 @@ public class MainTest {
 	}
 
 	@Test
-	public void test1() throws Exception {
+	public void databaseConnection() throws Exception {
 		try(Connection c = dataSource.getConnection()) {
 			int msgs = 3, count = 0;
 
@@ -80,7 +80,7 @@ public class MainTest {
 				try(ResultSet rs = ps.executeQuery()) {
 					while(rs.next()) {
 						count++;
-						log.info(rs.getString("msg") + ": " +  rs.getString("ts"));
+						//log.info(rs.getString("msg") + ": " +  rs.getString("ts"));
 					}
 				}
 			}
@@ -90,7 +90,7 @@ public class MainTest {
 	}
 
 	@Test
-	public void test2() throws Exception {
+	public void queryFromFile() throws Exception {
 		try(Connection c = dataSource.getConnection()) {
 			String sql = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("sql/time.sql"), "UTF-8");
 
