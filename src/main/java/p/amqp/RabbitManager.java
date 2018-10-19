@@ -28,6 +28,11 @@ public class RabbitManager {
 	@Bean
 	@ConfigurationProperties(prefix = "mq.a")
 	public SimpleRabbitListenerContainerFactory localhostContainerFactory(@Qualifier("localhostConnectionFactory") ConnectionFactory connectionFactory) {
+		/*
+		 * The SimpleRabbitListenerContainerFactory has matching
+		 * setters for Spring to inject the properties matching the configuration
+		 * prefix (ie. concurrentConsumers, maxConcurrentConsumers).
+		 */
 		SimpleRabbitListenerContainerFactory f = new SimpleRabbitListenerContainerFactory();
 		f.setConnectionFactory(connectionFactory);
 
@@ -38,11 +43,6 @@ public class RabbitManager {
 		@Bean
 		@ConfigurationProperties(prefix = "mq.a")
 		public ConnectionFactory localhostConnectionFactory() {
-			/*
-			 * This works because CachingConnectionFactory has the matching 
-			 * setters for Spring to inject the properties matching the configuration
-			 * prefix.
-			 */
 			CachingConnectionFactory cf = new CachingConnectionFactory();
 			return cf;
 		}
