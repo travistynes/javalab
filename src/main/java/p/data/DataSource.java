@@ -4,12 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Database access beans.
@@ -27,8 +29,15 @@ public class DataSource {
 	@Bean
 	@Primary
 	@ConfigurationProperties(prefix = "db.pg.dev")
-	public javax.sql.DataSource pgDS() {
-		javax.sql.DataSource ds =  DataSourceBuilder.create().build();
+	public DataSourceProperties pgDataSourceProperties() {
+		return new DataSourceProperties();
+	}
+
+	@Bean
+	@Primary
+	@ConfigurationProperties(prefix = "db.pg.dev.configuration")
+	public HikariDataSource pgDS() {
+		HikariDataSource ds = pgDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
 		log.info("Created data source: " + url);
 
 		return ds;
