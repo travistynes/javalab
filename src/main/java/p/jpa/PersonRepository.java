@@ -32,4 +32,8 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 	// Prevent POST requests by not exporting the save method.
 	@RestResource(exported = false)
 	Person save(Person person);
+
+	// Prevent DELETE requests by not exporting the delete method.
+	@RestResource(exported = false)
+	void delete(Person person);
 }
