@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.data.jpa.repository.Query;
 
 /*
  * See: https://docs.spring.io/spring-data/rest/docs/current/reference/html
@@ -12,10 +14,22 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource(collectionResourceRel = "people", path = "people")
 public interface PersonRepository extends CrudRepository<Person, Long> {
-	List<Person> findByName(@Param("name") String name);
+	/*
+	 * Spring will provide an implementation for methods following the
+	 * naming convention discussed here:
+	 *
+	 * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
+	 */
 	boolean existsById(@Param("id") long id);
 	boolean existsByName(@Param("name") String name);
 	List<Person> findByAge(@Param("age") int age);
 	long countByName(@Param("name") String name);
+
+	// Method names don't have to match a model field name when the query is provided.
+	@Query(value = "select * from public.person where name = :name", nativeQuery = true)
+	List<Person> lookupQuery(@Param("name") String name);
+
+	// Prevent POST requests by not exporting the save method.
+	@RestResource(exported = false)
 	Person save(Person person);
 }
