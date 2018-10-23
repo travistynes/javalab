@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 
 /*
  * See: https://docs.spring.io/spring-data/rest/docs/current/reference/html
- * HAL browser: https://localhost:8080/javalab/browser
+ * HAL browser: https://localhost:8080/javalab/api/browser
  */
-@RepositoryRestResource(collectionResourceRel = "people", path = "people")
+@RepositoryRestResource(path = "people", collectionResourceRel = "people", itemResourceRel = "person")
 public interface PersonRepository extends CrudRepository<Person, Long> {
 	/*
 	 * Spring will provide an implementation for methods following the
@@ -23,7 +23,9 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 	boolean existsById(@Param("id") long id);
 	boolean existsByName(@Param("name") String name);
 	List<Person> findByAge(@Param("age") int age);
+	Person findByName(@Param("name") String name);
 	long countByName(@Param("name") String name);
+	long countByAge(@Param("age") int age);
 
 	// Method names don't have to match a model field name when the query is provided.
 	@Query(value = "select * from public.person where name = :name", nativeQuery = true)

@@ -14,6 +14,11 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+/*
+ * RabbitMQ management url: http://localhost:15672/
+ * Default user: guest
+ * Default password: guest
+ */
 @Configuration
 public class RabbitManager {
 	private static final Logger log = LoggerFactory.getLogger(RabbitManager.class);
