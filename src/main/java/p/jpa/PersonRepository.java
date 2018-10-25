@@ -28,8 +28,12 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 	long countByAge(@Param("age") int age);
 
 	// Method names don't have to match a model field name when the query is provided.
-	@Query(value = "select * from public.person where name = :name", nativeQuery = true)
+	@Query(value = "select id, name, age from public.person where name = :name", nativeQuery = true)
 	List<Person> lookupQuery(@Param("name") String name);
+
+	@RestResource(path = "oldest", rel = "oldest")
+	@Query(value = "select id, name, age from public.person where age = (select max(age) from public.person)", nativeQuery = true)
+	List<Person> getOldestPerson();
 
 	// Prevent POST requests by not exporting the save method.
 	@RestResource(exported = false)
