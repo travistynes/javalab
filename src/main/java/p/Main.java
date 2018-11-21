@@ -20,18 +20,12 @@ public class Main {
 	private static String FBox7 = "topmostSubform[0].CopyB[0].RightCol[0].f1_14[0]";
 
 	public static void main(String[] args) throws Exception {
-		try(PDDocument pdf = PDDocument.load(Main.class.getClassLoader().getResourceAsStream("f1099msc.pdf"))) {
+		try(PDDocument pdf = PDDocument.load(Main.class.getClassLoader().getResourceAsStream("filled.pdf"))) {
+			//show(pdf);
 			PDAcroForm form = pdf.getDocumentCatalog().getAcroForm();
-			//show(form.getFields().get(0), "");
-			String fname = "", part = "";
-			for(PDField f : form.getFieldTree()) {
-				fname += f.getPartialName();
-				if(f instanceof PDNonTerminalField) {
-					fname += ".";
-				} else {
-					log.info(": " + f.getValueAsString());
-				}
-			}
+			//log.info("Val: " + form.getField("topmostSubform[0].CopyB[0].Header[0].c1_02[0]").getValueAsString());
+			form.getField("year").setValue("2019");
+			pdf.save("updated.pdf");
 			/*form.getField(FPayerName).setValue("Mr. Bob\n55 Bob Ln.\nCity-State, GA, 30117\nUnited States\n404-555-5555");
 			form.getField(FPayerTin).setValue("0000009");
 			form.getField(FRecipientTin).setValue("01010102");
@@ -45,15 +39,8 @@ public class Main {
 		}
 	}
 
-	private static void show(List<PDField> field, String fname) {
-		for(PDField f : field) {
-			fname += f.getPartialName();
-			if(f instanceof PDNonTerminalField) {
-				fname += ".";
-				show(((PDNonTerminalField)f).getChildren(), fname);
-			} else {
-				log.info(fname + ": " + f.getValueAsString());
-			}
-		}
+	private static void show(PDDocument pdf) throws Exception {
+		PrintFields exporter = new PrintFields();
+		exporter.printFields(pdf);
 	}
 }
