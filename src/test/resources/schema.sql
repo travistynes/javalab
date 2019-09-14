@@ -1,4 +1,4 @@
-drop all objects; -- H2 special statement to drop all objects
+drop all objects; -- H2 special statement to drop all objects.
 
 create table a (
 	id serial primary key,
