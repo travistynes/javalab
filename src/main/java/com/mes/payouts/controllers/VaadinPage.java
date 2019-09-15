@@ -9,6 +9,12 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
+import com.vaadin.flow.component.dependency.StyleSheet;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 
 /**
  * Access this page at: https://localhost:8080/javalab/vaadin
@@ -19,43 +25,58 @@ import com.vaadin.flow.component.icon.VaadinIcon;
  * https://vaadin.com/components
  */
 @Route(value="vaadin")
+@StyleSheet("styles.css")
 public class VaadinPage extends VerticalLayout {
 	public VaadinPage() {
 		this.createUI();
+		this.greet();
 	}
 
 	private void createUI() {
 		HorizontalLayout header = new HorizontalLayout();
 		HorizontalLayout center = new HorizontalLayout();
-		VerticalLayout navBar = new VerticalLayout();
+		VerticalLayout optionsPanel = new VerticalLayout();
 		VerticalLayout content = new VerticalLayout();
 		HorizontalLayout footer = new HorizontalLayout();
 
 		// Configure layouts
 		this.setSizeFull();
-		this.setPadding(false);
-		this.setSpacing(false);
+		this.setPadding(true);
+		this.setSpacing(true);
 
 		header.setWidth("100%");
 		header.setPadding(true);
-		header.add(new H2("Header"));
+		header.setJustifyContentMode(JustifyContentMode.CENTER);
+		header.add(new H2("Signup Form"));
 
-		navBar.setWidth("200px");
-		navBar.add(new H3("Navigation"));
+		optionsPanel.setWidth("400px");
+		optionsPanel.setJustifyContentMode(JustifyContentMode.START);
+		optionsPanel.add(new H3("Products"));
 
 		center.setWidth("100%");
+		center.setFlexGrow(1, content);
+
+		content.setAlignItems(Alignment.STRETCH);
 		content.setWidth("100%");
-		content.add(new H3("Signup Form"));
+		content.add(new H3("Terms and Conditions"));
+
+		Div tc = new Div();
+		tc.setText("The following terms & conditions apply.");
+		content.add(tc);
 		
 		// Checkboxes: https://vaadin.com/components/vaadin-checkbox/java-examples
 		Checkbox terms = new Checkbox("Accept Terms & Conditions");
 		Checkbox prefunding = new Checkbox("Prefunding");
 		Checkbox fasterFunding = new Checkbox("Faster Funding");
 
+		// Submit button
+		Button submitButton = new Button("Submit", VaadinIcon.CHECK.create());
+
 		terms.setValue(false);
 
 		prefunding.setValue(false);
 		prefunding.setEnabled(false);
+		submitButton.setEnabled(false); 
 
 		fasterFunding.setValue(false);
 		fasterFunding.setEnabled(false);
@@ -66,29 +87,41 @@ public class VaadinPage extends VerticalLayout {
 			if(checked) {
 				prefunding.setEnabled(true);
 				fasterFunding.setEnabled(true);
+				submitButton.setEnabled(true); 
 			} else {
 				prefunding.setEnabled(false);
 				fasterFunding.setEnabled(false);
+				submitButton.setEnabled(false); 
 			}
 		});
 
-		// Submit button
-		Button submitButton = new Button("Submit", VaadinIcon.CHECK.create());
 		submitButton.addClickListener(e -> {
 			Notification.show("Your options have been submitted.");
 		});
 
-		content.add(terms, prefunding, fasterFunding, submitButton);
+		content.add(terms);
+		optionsPanel.add(prefunding, fasterFunding, submitButton);
 
 		footer.setWidth("100%");
 		footer.setPadding(true);
 		footer.add(new H2("Footer"));
 
 		// Compose layout
-		center.add(navBar, content);
-		center.setFlexGrow(1, navBar);
+		center.add(content, optionsPanel);
 
 		this.add(header, center, footer);
 		this.expand(center);
+	}
+
+	private void greet() {
+		VaadinRequest request = VaadinService.getCurrentRequest();
+
+		String name = request.getParameter("name");
+
+		if(name != null) {
+			Notification.show("Hello, " + name);
+		} else {
+			Notification.show("Request from: " + request.getRemoteAddr());
+		}
 	}
 }
