@@ -28,6 +28,18 @@ mvn test
 mvn clean spring-boot:run -DskipTests
 ```
 
+#### Production build
+
+```sh
+mvn clean package -Pproduction
+```
+
+This activates the production profile in pom.xml and produces a jar file packaged with all front end dependencies so that Node.js and npm are not required to be installed on the production server. The application can then be started with
+
+```sh
+java -jar jarName.jar
+```
+
 #### External configuration
 
 See: https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html
