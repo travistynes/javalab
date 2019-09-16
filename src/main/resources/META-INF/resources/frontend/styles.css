@@ -1,3 +1,7 @@
 vaadin-horizontal-layout {
 	background-color: #efefef;
 }
+
+.left-border {
+	border-left: 1px solid #cccccc;
+}

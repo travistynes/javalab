@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
@@ -15,6 +16,9 @@ import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
+import java.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Access this page at: https://localhost:8080/javalab/vaadin
@@ -27,6 +31,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 @Route(value="vaadin")
 @StyleSheet("styles.css")
 public class VaadinPage extends VerticalLayout {
+	private static final Logger log = LoggerFactory.getLogger(VaadinPage.class);
+
 	public VaadinPage() {
 		this.createUI();
 		this.greet();
@@ -51,6 +57,7 @@ public class VaadinPage extends VerticalLayout {
 
 		optionsPanel.setWidth("400px");
 		optionsPanel.setJustifyContentMode(JustifyContentMode.START);
+		optionsPanel.addClassName("left-border");
 		optionsPanel.add(new H3("Products"));
 
 		center.setWidth("100%");
@@ -68,6 +75,16 @@ public class VaadinPage extends VerticalLayout {
 		Checkbox terms = new Checkbox("Accept Terms & Conditions");
 		Checkbox prefunding = new Checkbox("Prefunding");
 		Checkbox fasterFunding = new Checkbox("Faster Funding");
+
+		// Date picker
+		DatePicker startDatePicker = new DatePicker();
+		startDatePicker.setLabel("Select start date");
+		startDatePicker.setPlaceholder("Start date");
+
+		startDatePicker.addValueChangeListener(e -> {
+			LocalDate startDate = e.getValue();
+			log.info("Selected start date: " + startDate.toString());
+		});
 
 		// Submit button
 		Button submitButton = new Button("Submit", VaadinIcon.CHECK.create());
@@ -100,7 +117,7 @@ public class VaadinPage extends VerticalLayout {
 		});
 
 		content.add(terms);
-		optionsPanel.add(prefunding, fasterFunding, submitButton);
+		optionsPanel.add(prefunding, fasterFunding, startDatePicker, submitButton);
 
 		footer.setWidth("100%");
 		footer.setPadding(true);
