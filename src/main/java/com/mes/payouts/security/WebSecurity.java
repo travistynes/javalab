@@ -39,6 +39,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 			.and().authorizeRequests().antMatchers("/v1/public/**", "/guest/**").permitAll()
 			.anyRequest().authenticated();
 
+		http.formLogin()
+		// see: https://stackoverflow.com/questions/51823005/spring-security-basic-auth-and-form-login-for-the-same-api	
+
 		http.csrf().disable();
 		http.headers().frameOptions().disable();
 	}
