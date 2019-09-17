@@ -10,16 +10,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
-
 	@Autowired
 	private AuthProvider authProvider;
-	
-	@Autowired
-	private AuthFilter authFilter;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder authBuilder) throws Exception {
@@ -34,13 +32,19 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.addFilterBefore(authFilter, LogoutFilter.class)
-			.authorizeRequests()
-			.antMatchers("/v1/secure/**", "/v1/secure2/**").authenticated()
-			.antMatchers("/**").permitAll()
-			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		// Matchers are considered in order.
+		http.httpBasic()
+			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and().authorizeRequests()
+			.and().authorizeRequests().antMatchers("/v1/public/**", "/guest/**").permitAll()
+			.anyRequest().authenticated();
 
 		http.csrf().disable();
 		http.headers().frameOptions().disable();
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }
