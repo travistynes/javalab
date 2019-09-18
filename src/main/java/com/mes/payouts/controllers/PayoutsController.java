@@ -17,10 +17,10 @@ public class PayoutsController {
 	
 	private static final String CONTENT_TYPE_TEXT_HTML = "text/html";
 
-	@GetMapping("/v1/public/{resource}")
-	public void getSecureResource(@PathVariable String resource, @RequestParam(value="test", defaultValue="false") boolean test, HttpServletResponse response) throws IOException {
+	@GetMapping("/api/v1/{resource}")
+	public void getSecureResource(@PathVariable String resource, HttpServletResponse response) throws IOException {
 		try {
-			log.info("Requested resource: " + resource);
+			log.info("Requested API resource: " + resource);
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}
 		catch (Exception e) {
@@ -29,13 +29,14 @@ public class PayoutsController {
 		}
 	}
 
-	@GetMapping("/v1/basic")
-	public void getBasicAuthResource(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@GetMapping("/public/{resource}")
+	public void getPublicResource(@PathVariable String resource, HttpServletResponse response) throws IOException {
 		try {
+			log.info("Requested public resource: " + resource);
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}
 		catch (Exception e) {
-			log.error("Error.", e);
+			log.error("Error accessing resource (" + resource + ").", e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error: " + e.getMessage());
 		}
 	}
