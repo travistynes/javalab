@@ -13,6 +13,10 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+/**
+ * Configure Spring Security with Vaadin.
+ * See: https://vaadin.com/tutorials/securing-your-app-with-spring-security/setting-up-spring-security
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -32,18 +36,46 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// Matchers are considered in order.
-		http.httpBasic()
-			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and().authorizeRequests()
+			// Not using Spring CSRF. Vaadin has built-in CSRF.
+			http.csrf().disable()
+
+			// Setup access restrictions. Matchers are considered in order.
+			.authorizeRequests()
+
+			// Public resources (example)
 			.and().authorizeRequests().antMatchers("/v1/public/**", "/guest/**").permitAll()
-			.anyRequest().authenticated();
 
-		http.formLogin()
-		// see: https://stackoverflow.com/questions/51823005/spring-security-basic-auth-and-form-login-for-the-same-api	
+			// Authenticate all requests
+			.anyRequest().authenticated()
 
-		http.csrf().disable();
+			// Setup login authentication
+			.and().formLogin()
+			.loginPage("/login").permitAll()
+			.loginProcessingUrl("/login/process")
+			.failureUrl("/login?error")
+			.defaultSuccessUrl("/login/success")
+
+			// Basic authentication
+			.and().httpBasic()
+			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 		http.headers().frameOptions().disable();
+	}
+
+	@Override
+	public void configure(org.springframework.security.config.annotation.web.builders.WebSecurity web) throws Exception {
+		web.ignoring().antMatchers(
+				"/VAADIN/**",
+				"/favicon.ico",
+				"/robots.txt",
+				"/manifest.webmanifest",
+				"/sw.js",
+				"/offline-page.html",
+				"/frontend/**",
+				"/webjars/**",
+				"/frontend-es5/**",
+				"/frontend-es6/**"
+				);
 	}
 
 	@Bean
