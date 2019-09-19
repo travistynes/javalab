@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Access this page at: https://localhost:8080/javalab/vaadin
+ * Access this page at: https://localhost:8081/javalab/vaadin
  *
  * Vaadin API doc: https://vaadin.com/api/platform/14.0.4/overview-summary.html
  *

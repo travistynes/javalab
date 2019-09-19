@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Configure multiple security instances (basic auth and form login).
@@ -69,10 +70,13 @@ public class SecurityConfiguration {
 	 */
 	@Configuration
 	public static class FormLoginConfiguration extends WebSecurityConfigurerAdapter {
+		@Value("${server.port}")
+		private String port;
+
 		@Bean
 		@Override
 		public UserDetailsService userDetailsService() {
-			UserDetails user = User.withUsername("user").password("{noop}password123").roles("USER").build();
+			UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password123").roles("USER").build();
 
 			return new InMemoryUserDetailsManager(user);
 		}
@@ -94,7 +98,13 @@ public class SecurityConfiguration {
 				// Authenticate all requests
 				.anyRequest().authenticated()
 
-				// Setup login authentication
+				/**
+				 * Setup form login authentication. Unauthenticated users
+				 * will be redirected to the loginPage. Upon successful authentication,
+				 * they will be redirected to the originally requested page.
+				 * If a page wasn't originally requested (they hit logingPage directly)
+				 * then the defaultSuccessUrl will be used.
+				 */
 				.and().formLogin().permitAll()
 				.loginPage("/login")
 				.loginProcessingUrl("/login")
@@ -104,6 +114,13 @@ public class SecurityConfiguration {
 				// Configure logout. The default logout URL in Spring is "/logout"
 				.and().logout()
 				.logoutSuccessUrl("/login");
+
+			/**
+			 * Spring Security seems to redirect https requests to port 8443 by default,
+			 * but not always (it always happens during a failed login attempt).
+			 * This will map it back to the port we have configured for the application.
+			 */
+			http.portMapper().http(8443).mapsTo(Integer.parseInt(port));
 		}
 
 		@Override

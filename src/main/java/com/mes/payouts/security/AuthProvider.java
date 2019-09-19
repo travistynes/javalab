@@ -38,8 +38,12 @@ public class AuthProvider implements AuthenticationProvider {
 
 		if(name.equals(user) && credentials.equals(password)) {
 			// Return a trusted (isAuthenticated() == true) token.
+			log.debug("Authenticated: " + name);
+
 			return new UsernamePasswordAuthenticationToken(name, credentials, new ArrayList<>());
 		}
+
+		log.debug("Authentication failed: " + name);
 
 		return null;
 	}
