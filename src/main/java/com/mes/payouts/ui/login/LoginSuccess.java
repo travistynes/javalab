@@ -1,4 +1,4 @@
-package com.mes.payouts.controllers;
+package com.mes.payouts.ui.login;
 
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -20,12 +20,12 @@ import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Route(value="login/error")
+@Route(value="login/success")
 @StyleSheet("styles.css")
-public class LoginError extends VerticalLayout {
-	private static final Logger log = LoggerFactory.getLogger(LoginError.class);
+public class LoginSuccess extends VerticalLayout {
+	private static final Logger log = LoggerFactory.getLogger(LoginSuccess.class);
 
-	public LoginError() {
+	public LoginSuccess() {
 		this.createUI();
 		this.greet();
 	}
@@ -45,7 +45,7 @@ public class LoginError extends VerticalLayout {
 		header.setWidth("100%");
 		header.setPadding(true);
 		header.setJustifyContentMode(JustifyContentMode.CENTER);
-		header.add(new H2("Error - Unauthorized"));
+		header.add(new H2("Login - Success"));
 
 		optionsPanel.setWidth("400px");
 		optionsPanel.setJustifyContentMode(JustifyContentMode.START);

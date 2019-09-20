@@ -1,4 +1,4 @@
-package com.mes.payouts.controllers;
+package com.mes.payouts.ui.login;
 
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Access this page at: https://localhost:8081/javalab/vaadin
+ * Access this page at: https://localhost:8081/mes-payouts-network-integration/vaadin
  *
  * Vaadin API doc: https://vaadin.com/api/platform/14.0.4/overview-summary.html
  *

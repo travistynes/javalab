@@ -1,5 +1,9 @@
 vaadin-horizontal-layout {
-	background-color: #efefef;
+	background-color: #ffffff;
+}
+
+vaadin-login-form {
+	border: 1px solid #cccccc;
 }
 
 .left-border {

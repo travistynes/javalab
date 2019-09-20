@@ -1,4 +1,4 @@
-package com.mes.payouts.controllers;
+package com.mes.payouts.ui.login;
 
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;

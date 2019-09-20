@@ -37,15 +37,17 @@ public class AuthProvider implements AuthenticationProvider {
 		}
 
 		if(name.equals(user) && credentials.equals(password)) {
-			// Return a trusted (isAuthenticated() == true) token.
 			log.debug("Authenticated: " + name);
 
-			return new UsernamePasswordAuthenticationToken(name, credentials, new ArrayList<>());
+			// Return a trusted (isAuthenticated() == true) token.
+			Authentication auth = new UsernamePasswordAuthenticationToken(name, credentials, new ArrayList<>());
+
+			return auth;
+		} else {
+			log.debug("Authentication failed: " + name);
+
+			throw new BadCredentialsException("Incorrect username or password.");
 		}
-
-		log.debug("Authentication failed: " + name);
-
-		return null;
 	}
 
 	@Override

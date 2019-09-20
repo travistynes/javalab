@@ -16,16 +16,26 @@ import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
+import com.vaadin.flow.component.details.Details;
+import com.vaadin.flow.component.Text;
 import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Route(value="login/success")
+/**
+ * Access this page at: https://localhost:8080/mes-payouts-network-integration/register
+ *
+ * Vaadin API doc: https://vaadin.com/api/platform/14.0.4/overview-summary.html
+ *
+ * See all Vaadin components (checkbox, text field, date picker, etc) at
+ * https://vaadin.com/components
+ */
+@Route(value="register")
 @StyleSheet("styles.css")
-public class LoginSuccess extends VerticalLayout {
-	private static final Logger log = LoggerFactory.getLogger(LoginSuccess.class);
+public class MerchantSignupPage extends VerticalLayout {
+	private static final Logger log = LoggerFactory.getLogger(MerchantSignupPage.class);
 
-	public LoginSuccess() {
+	public MerchantSignupPage() {
 		this.createUI();
 		this.greet();
 	}
@@ -45,7 +55,7 @@ public class LoginSuccess extends VerticalLayout {
 		header.setWidth("100%");
 		header.setPadding(true);
 		header.setJustifyContentMode(JustifyContentMode.CENTER);
-		header.add(new H2("Login - Success"));
+		header.add(new H2("Signup Form"));
 
 		optionsPanel.setWidth("400px");
 		optionsPanel.setJustifyContentMode(JustifyContentMode.START);
@@ -58,13 +68,9 @@ public class LoginSuccess extends VerticalLayout {
 		content.setAlignItems(Alignment.STRETCH);
 		content.setWidth("100%");
 		content.add(new H3("Terms and Conditions"));
-
-		Div tc = new Div();
-		tc.setText("The following terms & conditions apply.");
-		content.add(tc);
 		
 		// Checkboxes: https://vaadin.com/components/vaadin-checkbox/java-examples
-		Checkbox terms = new Checkbox("Accept Terms & Conditions");
+		Checkbox termsCheckbox = new Checkbox("Accept Terms & Conditions");
 		Checkbox prefunding = new Checkbox("Prefunding");
 		Checkbox fasterFunding = new Checkbox("Faster Funding");
 
@@ -75,13 +81,16 @@ public class LoginSuccess extends VerticalLayout {
 
 		startDatePicker.addValueChangeListener(e -> {
 			LocalDate startDate = e.getValue();
-			log.info("Selected start date: " + startDate.toString());
+
+			if(startDate != null) {
+				log.info("Selected start date: " + startDate.toString());
+			}
 		});
 
 		// Submit button
 		Button submitButton = new Button("Submit", VaadinIcon.CHECK.create());
 
-		terms.setValue(false);
+		termsCheckbox.setValue(false);
 
 		prefunding.setValue(false);
 		prefunding.setEnabled(false);
@@ -90,7 +99,7 @@ public class LoginSuccess extends VerticalLayout {
 		fasterFunding.setValue(false);
 		fasterFunding.setEnabled(false);
 
-		terms.addValueChangeListener(e -> {
+		termsCheckbox.addValueChangeListener(e -> {
 			boolean checked = e.getValue();
 
 			if(checked) {
@@ -108,7 +117,15 @@ public class LoginSuccess extends VerticalLayout {
 			Notification.show("Your options have been submitted.");
 		});
 
-		content.add(terms);
+		VerticalLayout termsContent = new VerticalLayout();
+		Text terms1 = new Text("The following terms and conditions apply...");
+
+		termsContent.add(terms1, termsCheckbox);
+
+		// Details
+		Details termsDetails = new Details("Terms & Conditions", termsContent);
+
+		content.add(termsDetails);
 		optionsPanel.add(prefunding, fasterFunding, startDatePicker, submitButton);
 
 		footer.setWidth("100%");

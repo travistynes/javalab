@@ -1,6 +1,7 @@
 package com.mes.payouts.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,6 +62,12 @@ public class SecurityConfiguration {
 				// Every request must be re-authenticated (per REST stateless constraint)
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		}
+
+		@Bean
+		@Override
+		public AuthenticationManager authenticationManagerBean() throws Exception {
+			return super.authenticationManagerBean();
+		}
 	}
 
 	/**
@@ -90,13 +97,13 @@ public class SecurityConfiguration {
 				.authorizeRequests()
 
 				// Public resources (example)
-				.and().authorizeRequests().antMatchers("/public/**", "/guest/**").permitAll()
+				.and().authorizeRequests().antMatchers("/public/**", "/login").permitAll()
 
 				// Allow all Vaadin Flow internal requests
 				.requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
 
-				// Authenticate all requests
-				.anyRequest().authenticated()
+				// Authenticate all other requests
+				.anyRequest().authenticated();
 
 				/**
 				 * Setup form login authentication. Unauthenticated users
@@ -105,6 +112,7 @@ public class SecurityConfiguration {
 				 * If a page wasn't originally requested (they hit logingPage directly)
 				 * then the defaultSuccessUrl will be used.
 				 */
+				/*
 				.and().formLogin().permitAll()
 				.loginPage("/login")
 				.loginProcessingUrl("/login")
@@ -114,13 +122,14 @@ public class SecurityConfiguration {
 				// Configure logout. The default logout URL in Spring is "/logout"
 				.and().logout()
 				.logoutSuccessUrl("/login");
+				*/
 
 			/**
 			 * Spring Security seems to redirect https requests to port 8443 by default,
 			 * but not always (it always happens during a failed login attempt).
 			 * This will map it back to the port we have configured for the application.
 			 */
-			http.portMapper().http(8443).mapsTo(Integer.parseInt(port));
+			//http.portMapper().http(8443).mapsTo(Integer.parseInt(port));
 		}
 
 		@Override
