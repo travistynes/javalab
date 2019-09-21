@@ -6,6 +6,35 @@ vaadin-login-form {
 	border: 1px solid #cccccc;
 }
 
+.header {
+	background-color: #fdfdfd;
+	border-bottom: 1px solid #eaeaea;
+}
+
+.header-logo {
+	width: 150px;
+	height: 66px;
+}
+
+.footer {
+	background-color: #3e3e3e;
+}
+
+.footer-mes-logo {
+	width: 100px;
+	height: 44px;
+}
+
+.footer-pon-logo {
+	width: 110px;
+	height: 49px;
+}
+
+.partner-icon {
+	width: 60px;
+	height: 60px;
+}
+
 .left-border {
 	border-left: 1px solid #cccccc;
 }
