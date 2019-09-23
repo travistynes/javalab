@@ -29,8 +29,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import com.vaadin.flow.component.login.AbstractLogin.LoginEvent;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.annotation.PostConstruct;
 
 /**
  * Access this page at: https://localhost:8081/javalab/login
@@ -41,6 +43,7 @@ import org.slf4j.LoggerFactory;
  * https://vaadin.com/components
  */
 @Route(value="login")
+@UIScope
 @StyleSheet("styles/styles.css")
 public class LoginPage extends VerticalLayout {
 	private static final Logger log = LoggerFactory.getLogger(LoginPage.class);
@@ -52,6 +55,11 @@ public class LoginPage extends VerticalLayout {
 
 	public LoginPage() {
 		this.createUI();
+	}
+
+	@PostConstruct
+	private void init() {
+		log.info("POST CONSTRUCT");
 	}
 
 	private void createUI() {

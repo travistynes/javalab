@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Route(value="login/success")
-@StyleSheet("styles.css")
+@StyleSheet("styles/styles.css")
 public class LoginSuccess extends VerticalLayout {
 	private static final Logger log = LoggerFactory.getLogger(LoginSuccess.class);
 

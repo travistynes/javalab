@@ -2,6 +2,7 @@ package com.mes.payouts.auth;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import javax.sql.DataSource;
 import org.junit.After;
 import org.junit.Before;
@@ -33,9 +34,6 @@ import org.springframework.test.web.servlet.MockMvc;
 public class AuthTest {
 	private static final Logger log = LoggerFactory.getLogger(AuthTest.class);
 
-	@Value("${security.authToken}")
-	private String authToken;
-
 	@Autowired
 	private DataSource dataSource;
 
@@ -63,20 +61,20 @@ public class AuthTest {
 	@Test
 	public void noCredentials() throws Exception {
 		// No auth header.
-		mockMvc.perform(get("/v1/secure/resource"))
-			.andExpect(status().isForbidden());
+		mockMvc.perform(get("/api/v1/resource"))
+			.andExpect(status().isUnauthorized());
 	}
 
 	@Test
 	public void badCredentials() throws Exception {
 		// Invalid credentials.
-		mockMvc.perform(get("/v1/secure/resource").header("X-AUTH-TOKEN", authToken + "_bad"))
-			.andExpect(status().isForbidden());
+		mockMvc.perform(get("/api/v1/resource").with(httpBasic("user", "bad_password")))
+			.andExpect(status().isUnauthorized());
 	}
 
 	@Test
 	public void validCredentialsNoData() throws Exception {
-		mockMvc.perform(get("/v1/secure/resource").header("X-AUTH-TOKEN", authToken))
+		mockMvc.perform(get("/api/v1/resource").with(httpBasic("user", "password")))
 			.andExpect(status().isNoContent());
 	}
 }

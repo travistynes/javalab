@@ -97,7 +97,7 @@ public class SecurityConfiguration {
 				.authorizeRequests()
 
 				// Public resources (example)
-				.and().authorizeRequests().antMatchers("/public/**", "/login").permitAll()
+				.and().authorizeRequests().antMatchers("/actuator/**", "/public/**", "/login").permitAll()
 
 				// Allow all Vaadin Flow internal requests
 				.requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
