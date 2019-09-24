@@ -80,14 +80,6 @@ public class SecurityConfiguration {
 		@Value("${server.port}")
 		private String port;
 
-		@Bean
-		@Override
-		public UserDetailsService userDetailsService() {
-			UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password123").roles("USER").build();
-
-			return new InMemoryUserDetailsManager(user);
-		}
-
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			// Not using Spring CSRF. Vaadin has built-in CSRF.
@@ -96,7 +88,7 @@ public class SecurityConfiguration {
 				// Setup access restrictions. Matchers are considered in order.
 				.authorizeRequests()
 
-				// Public resources (example)
+				// Public resources
 				.and().authorizeRequests().antMatchers("/actuator/**", "/public/**", "/login").permitAll()
 
 				// Allow all Vaadin Flow internal requests
@@ -130,6 +122,8 @@ public class SecurityConfiguration {
 			 * This will map it back to the port we have configured for the application.
 			 */
 			//http.portMapper().http(8443).mapsTo(Integer.parseInt(port));
+
+			http.headers().frameOptions().disable();
 		}
 
 		@Override
