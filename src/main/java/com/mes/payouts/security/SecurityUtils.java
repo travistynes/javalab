@@ -8,6 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * SecurityUtils takes care of all such static operations that have to do with
@@ -15,6 +17,7 @@ import java.util.stream.Stream;
  *
  */
 public final class SecurityUtils {
+	private static final Logger log = LoggerFactory.getLogger(SecurityUtils.class);
 
 	private SecurityUtils() {
 		// Util methods only
@@ -31,6 +34,7 @@ public final class SecurityUtils {
 	 */
 	static boolean isFrameworkInternalRequest(HttpServletRequest request) {
 		final String parameterValue = request.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER);
+		log.info("RTP: " + parameterValue);
 		return parameterValue != null
 			&& Stream.of(RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
 	}

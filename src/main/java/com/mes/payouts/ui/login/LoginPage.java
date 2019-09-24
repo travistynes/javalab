@@ -97,7 +97,6 @@ public class LoginPage extends VerticalLayout {
 		 * https://vaadin.com/api/platform/14.0.5/com/vaadin/flow/component/login/LoginForm.html
 		 */
 		loginForm.setForgotPasswordButtonVisible(false);
-		//content.getElement().appendChild(loginForm.getElement());
 
 		// Login submit listener
 		loginForm.addLoginListener(event -> login(event));
@@ -121,8 +120,8 @@ public class LoginPage extends VerticalLayout {
 		footer.add(footerMesLogo, partnerIcon, footerPayoutsNetworkLogo);
 		
 		// Compose layout
-		this.add(header, content, footer);
 		content.add(p1, loginForm);
+		this.add(header, content, footer);
 
 		//this.expand(content);
 		//content.setFlexGrow(1, p1);
