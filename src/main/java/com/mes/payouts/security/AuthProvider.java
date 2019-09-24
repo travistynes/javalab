@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
@@ -18,14 +20,11 @@ import java.util.ArrayList;
 public class AuthProvider implements AuthenticationProvider {
 	private static final Logger log = LoggerFactory.getLogger(AuthProvider.class);
 
-	@Value("${security.user}")
-	private String user;
-
-	@Value("${security.password}")
-	private String password;
-
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private UserDetailsService userDetailsService;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) {
@@ -36,7 +35,9 @@ public class AuthProvider implements AuthenticationProvider {
 			throw new BadCredentialsException("Missing password.");
 		}
 
-		if(name.equals(user) && credentials.equals(password)) {
+		UserDetails user = userDetailsService.loadUserByUsername(name);
+
+		if(name.equals(user.getUsername()) && credentials.equals(user.getPassword())) {
 			log.debug("Authenticated: " + name);
 
 			// Return a trusted (isAuthenticated() == true) token.
