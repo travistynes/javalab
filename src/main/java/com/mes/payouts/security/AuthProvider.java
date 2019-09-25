@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import com.mes.payouts.security.user.MesUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class AuthProvider implements AuthenticationProvider {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private MesUserDetailsService userDetailsService;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) {
@@ -37,7 +37,7 @@ public class AuthProvider implements AuthenticationProvider {
 
 		UserDetails user = userDetailsService.loadUserByUsername(name);
 
-		if(name.equals(user.getUsername()) && credentials.equals(user.getPassword())) {
+		if(name.equals(user.getUsername()) && credentials.equals(user.getPassword()) && user.isEnabled()) {
 			log.debug("Authenticated: " + name);
 
 			// Return a trusted (isAuthenticated() == true) token.

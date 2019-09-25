@@ -1,1 +1,3 @@
-insert into user(name, password) values ('user', 'password'),('bob', 'bobword');
+insert into mes.users(login_name, password, enabled)
+values
+('user', 'password', 'Y'),('bob', 'bobword', 'N');

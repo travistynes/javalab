@@ -19,7 +19,7 @@ public class MesUserDetails implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return user.getPasswordEncoded();
+		return user.getPassword();
 	}
 
 	@Override
@@ -29,12 +29,12 @@ public class MesUserDetails implements UserDetails {
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return true;
+		return user.isEnabled();
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return user.isEnabled();
 	}
 
 	@Override

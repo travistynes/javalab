@@ -14,13 +14,13 @@ public class User {
 
 	@Id
 	@Column(name="user_id")
-	private Long userID;
+	private long userId;
 
 	@Column(name="login_name")
 	private String loginName;
 
-	@Column(name="password_enc")
-	private String passwordEncoded;
+	@Column(name="password")
+	private String password;
 
 	@Column(name="password_hash_type")
 	private int passwordHashType;
@@ -35,8 +35,12 @@ public class User {
 		return loginName;
 	}
 
-	public String getPasswordEncoded() {
-		return passwordEncoded;
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 	public boolean isEnabled() {

@@ -59,7 +59,7 @@ public class LoginPage extends VerticalLayout {
 
 	@PostConstruct
 	private void init() {
-		log.info("POST CONSTRUCT");
+
 	}
 
 	private void createUI() {

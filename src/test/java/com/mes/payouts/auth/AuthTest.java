@@ -77,4 +77,10 @@ public class AuthTest {
 		mockMvc.perform(get("/api/v1/resource").with(httpBasic("user", "password")))
 			.andExpect(status().isNoContent());
 	}
+
+	@Test
+	public void accountDisabled() throws Exception {
+		mockMvc.perform(get("/api/v1/resource").with(httpBasic("bob", "bobword")))
+			.andExpect(status().isUnauthorized());
+	}
 }
