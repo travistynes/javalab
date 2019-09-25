@@ -20,7 +20,7 @@ public class MesUserDetailsService implements UserDetailsService {
 		User user = userRepository.findByLoginName(username);
 
 		if(user == null) {
-			throw new BadCredentialsException(username);
+			throw new BadCredentialsException("User not found: " + username);
 		}
 
 		return new MesUserDetails(user);

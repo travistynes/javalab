@@ -7,6 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 
+/**
+ * When annotations are on fields instead of getters, JPA will use reflection to access
+ * them, even if they are private.
+ */
 @Entity
 @Table(name = "USERS", schema = "MES")
 public class User {
@@ -33,10 +37,6 @@ public class User {
 
 	public String getLoginName() {
 		return loginName;
-	}
-
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
 	}
 
 	public String getPassword() {
