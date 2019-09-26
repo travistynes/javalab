@@ -15,11 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -77,6 +75,9 @@ public class SecurityConfiguration {
 	 */
 	@Configuration
 	public static class FormLoginConfiguration extends WebSecurityConfigurerAdapter {
+		@Autowired
+		AuthenticationSuccessHandler authSuccessHandler;
+
 		@Value("${server.port}")
 		private String port;
 
@@ -84,9 +85,11 @@ public class SecurityConfiguration {
 		protected void configure(HttpSecurity http) throws Exception {
 			// Not using Spring CSRF. Vaadin has built-in CSRF.
 			http.csrf().disable()
+				// Redirect unauthenticated requests to login page.
+				.exceptionHandling().authenticationEntryPoint(loginUrlEntryPoint())
 
 				// Setup access restrictions. Matchers are considered in order.
-				.authorizeRequests()
+				.and().authorizeRequests()
 
 				// Public resources
 				.and().authorizeRequests().antMatchers("/actuator/**", "/public/**", "/login").permitAll()
@@ -101,15 +104,12 @@ public class SecurityConfiguration {
 				 * Setup form login authentication. Unauthenticated users
 				 * will be redirected to the loginPage. Upon successful authentication,
 				 * they will be redirected to the originally requested page.
-				 * If a page wasn't originally requested (they hit logingPage directly)
-				 * then the defaultSuccessUrl will be used.
 				 */
 				/*
 				.and().formLogin().permitAll()
 				.loginPage("/login")
-				.loginProcessingUrl("/login")
-				.failureUrl("/login/error")
-				.defaultSuccessUrl("/vaadin")
+				.failureUrl("/login")
+				.successHandler(authSuccessHandler)
 
 				// Configure logout. The default logout URL in Spring is "/logout"
 				.and().logout()
@@ -123,6 +123,7 @@ public class SecurityConfiguration {
 			 */
 			//http.portMapper().http(8443).mapsTo(Integer.parseInt(port));
 
+			// Allow frames in the page. For example, h2-console won't work without this.
 			http.headers().frameOptions().disable();
 		}
 
@@ -140,6 +141,11 @@ public class SecurityConfiguration {
 					"/frontend-es5/**",
 					"/frontend-es6/**"
 					);
+		}
+
+		@Bean
+		public AuthenticationEntryPoint loginUrlEntryPoint() {
+			return new LoginUrlAuthenticationEntryPoint("/login");
 		}
 	}
 

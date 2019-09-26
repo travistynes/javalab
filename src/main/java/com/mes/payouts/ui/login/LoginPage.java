@@ -11,6 +11,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.dependency.StyleSheet;
@@ -30,9 +31,12 @@ import org.springframework.security.core.Authentication;
 import com.vaadin.flow.component.login.AbstractLogin.LoginEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.security.web.savedrequest.DefaultSavedRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.annotation.PostConstruct;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.PostConstruct;
 
 /**
  * Access this page at: https://localhost:8081/javalab/login
@@ -48,10 +52,15 @@ import javax.annotation.PostConstruct;
 public class LoginPage extends VerticalLayout {
 	private static final Logger log = LoggerFactory.getLogger(LoginPage.class);
 
-	private LoginForm loginForm = new LoginForm();
-
+	@Autowired
+	HttpServletRequest request;
+	
 	@Autowired
 	private AuthenticationManager authManager;
+
+	private VerticalLayout content;
+	private LoginForm loginForm = new LoginForm();
+	private Icon loginSuccessIcon = new Icon(VaadinIcon.CHECK_CIRCLE);
 
 	public LoginPage() {
 		this.createUI();
@@ -64,7 +73,7 @@ public class LoginPage extends VerticalLayout {
 
 	private void createUI() {
 		HorizontalLayout header = new HorizontalLayout();
-		VerticalLayout content = new VerticalLayout();
+		content = new VerticalLayout();
 		HorizontalLayout footer = new HorizontalLayout();
 
 		// Configure layouts
@@ -128,6 +137,11 @@ public class LoginPage extends VerticalLayout {
 		this.setFlexGrow(1, content);
 	}
 
+	/**
+	 * This is how to manually authenticate to Spring Security.
+	 * This isn't being used for now because formLogin() is enabled in SecurityConfiguration
+	 * so Spring itself will process the authentication when the user logs in.
+	 */
 	private void login(LoginEvent event) {
 		String username = event.getUsername();
 		String password = event.getPassword();
@@ -141,9 +155,25 @@ public class LoginPage extends VerticalLayout {
 			securityContext.setAuthentication(auth);
 
 			// Redirect authenticated user
-			UI.getCurrent().navigate(LoginSuccess.class);
+			String attr = "SPRING_SECURITY_SAVED_REQUEST";
+			DefaultSavedRequest savedRequest = (DefaultSavedRequest)request.getSession().getAttribute(attr);
+			
+			if(savedRequest != null) {
+				// Redirect to originally requested page.
+				String contextPath = savedRequest.getContextPath();
+				String targetUri = StringUtils.stripStart(savedRequest.getRequestURI(), contextPath);
+
+				UI.getCurrent().getPage().setLocation(savedRequest.getRequestURI());
+			} else {
+				// User didn't have an original destination (directly hit login page).
+				//UI.getCurrent().navigate(LoginSuccess.class);
+				content.add(loginSuccessIcon);
+				loginForm.setEnabled(true);
+			}
 		} catch(BadCredentialsException e) {
 			loginForm.setError(true);
+
+			content.remove(loginSuccessIcon);
 		}
 	}
 }

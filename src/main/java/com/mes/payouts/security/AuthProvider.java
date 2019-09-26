@@ -38,10 +38,8 @@ public class AuthProvider implements AuthenticationProvider {
 		UserDetails user = userDetailsService.loadUserByUsername(name);
 
 		if(name.equals(user.getUsername()) && credentials.equals(user.getPassword()) && user.isEnabled()) {
-			log.debug("Authenticated: " + name);
-
 			// Return a trusted (isAuthenticated() == true) token.
-			Authentication auth = new UsernamePasswordAuthenticationToken(name, credentials, new ArrayList<>());
+			Authentication auth = new UsernamePasswordAuthenticationToken(user, credentials, new ArrayList<>());
 
 			return auth;
 		} else {
