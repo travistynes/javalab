@@ -12,27 +12,27 @@ vaadin-login-form {
 }
 
 .header-logo {
-	width: 150px;
-	height: 66px;
+	width: 123px;
+	height: 93px;
 }
 
 .footer {
 	background-color: #3e3e3e;
 }
 
-.footer-mes-logo {
-	width: 100px;
-	height: 44px;
+.footer-linux-logo {
+	width: 50px;
+	height: 50px;
 }
 
-.footer-pon-logo {
-	width: 110px;
-	height: 49px;
+.footer-android-logo {
+	width: 50px;
+	height: 50px;
 }
 
-.partner-icon {
-	width: 60px;
-	height: 60px;
+.footer-java-logo {
+	width: 50px;
+	height: 50px;
 }
 
 .left-border {

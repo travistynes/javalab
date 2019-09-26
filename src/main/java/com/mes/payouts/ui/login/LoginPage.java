@@ -86,7 +86,7 @@ public class LoginPage extends VerticalLayout {
 		header.setJustifyContentMode(JustifyContentMode.CENTER);
 		header.addClassName("header");
 		
-		Image headerLogo = new Image("frontend/images/logo_black_transparent.png", "Merchant e-Solutions");
+		Image headerLogo = new Image("frontend/images/header_logo.png", "Android Logo");
 		headerLogo.addClassName("header-logo");
 		header.add(headerLogo);
 
@@ -98,7 +98,7 @@ public class LoginPage extends VerticalLayout {
 		content.setAlignItems(Alignment.CENTER); // Cross axis
 		content.setJustifyContentMode(JustifyContentMode.EVENLY); // Main axis
 
-		Paragraph p1 = new Paragraph("Login to opt-in to the Faster Funding and Immediate Pre-Funding program.");
+		Paragraph p1 = new Paragraph("Portal Login (User name: user, Password: password)");
 
 		/**
 		 * Add login form.
@@ -117,16 +117,16 @@ public class LoginPage extends VerticalLayout {
 		footer.setAlignItems(Alignment.CENTER);
 		footer.setJustifyContentMode(JustifyContentMode.EVENLY);
 
-		Image footerMesLogo = new Image("frontend/images/logo_white.png", "Merchant e-Solutions");
-		footerMesLogo.addClassName("footer-mes-logo");
+		Image footerLinuxLogo = new Image("frontend/images/linux_logo.png", "Linux Logo");
+		footerLinuxLogo.addClassName("footer-linux-logo");
 
-		Image partnerIcon = new Image("frontend/images/partner_icon.png", "Technology Partner");
-		partnerIcon.addClassName("partner-icon");
+		Image footerAndroidLogo = new Image("frontend/images/android_logo.png", "Android Logo");
+		footerAndroidLogo.addClassName("footer-android-logo");
 
-		Image footerPayoutsNetworkLogo = new Image("frontend/images/logo_payoutsnetwork.png", "Payouts Network");
-		footerPayoutsNetworkLogo.addClassName("footer-pon-logo");
+		Image footerJavaLogo = new Image("frontend/images/java_logo.png", "Java Logo");
+		footerJavaLogo.addClassName("footer-java-logo");
 
-		footer.add(footerMesLogo, partnerIcon, footerPayoutsNetworkLogo);
+		footer.add(footerLinuxLogo, footerAndroidLogo, footerJavaLogo);
 		
 		// Compose layout
 		content.add(p1, loginForm);
