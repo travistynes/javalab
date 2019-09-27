@@ -46,4 +46,12 @@ public class MesUserDetails implements UserDetails {
 	public boolean isEnabled() {
 		return user.isEnabled();
 	}
+
+	public String getEmail() {
+		return user.getEmail();
+	}
+
+	public Department getDepartment() {
+		return user.getDepartment();
+	}
 }
