@@ -47,9 +47,11 @@ public class UserTest {
 	public void joinUserDetails() throws Exception {
 		MesUserDetails user = (MesUserDetails)userDetailsService.loadUserByUsername("user");
 		MesUserDetails bob = (MesUserDetails)userDetailsService.loadUserByUsername("bob");
+		MesUserDetails ralph = (MesUserDetails)userDetailsService.loadUserByUsername("ralph");
 
 		Assert.assertEquals("user@example.com", user.getEmail());
 		Assert.assertEquals("bob@example.com", bob.getEmail());
+		Assert.assertNull(ralph.getEmail());
 		Assert.assertTrue(user.isEnabled());
 		Assert.assertFalse(bob.isEnabled());
 	}

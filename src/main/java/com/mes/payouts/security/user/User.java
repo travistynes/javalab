@@ -12,16 +12,17 @@ import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
 
 /**
- * When annotations are on fields instead of getters, JPA will use reflection to access
- * them, even if they are private.
- *
  * This example joins two tables together into a single entity using @SecondaryTable,
  * and joins to another entity using a @OneToOne mapping because a SecondaryTable can
  * only map another table to the primary table's primary key, not any arbitrary
- * non-primary key column. The @OneToOne does not have this restriction.
+ * non-primary key column. The @OneToOne mapping does not have this restriction.
  *
  * https://docs.oracle.com/javaee/7/api/javax/persistence/SecondaryTable.html
  * https://www.baeldung.com/jpa-one-to-one
+ *
+ * When annotations are on fields instead of getters, JPA will use reflection to access
+ * them, even if they are private.
+ *
  */
 @Entity
 @Table(name = "USERS", schema = "MES")
