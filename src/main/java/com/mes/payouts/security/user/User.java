@@ -10,6 +10,8 @@ import javax.persistence.SecondaryTable;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * This example joins two tables together into a single entity using @SecondaryTable,
@@ -51,6 +53,7 @@ public class User {
 
 	@OneToOne
 	@JoinColumn(name="department_id", referencedColumnName="dept_id")
+	@NotFound(action=NotFoundAction.IGNORE)
 	private Department department;
 
 	public String getLoginName() {
