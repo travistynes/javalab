@@ -8,6 +8,7 @@ insert into mes.users(login_name, password, department_id, enabled)
 values
 ('user', 'password', 0, 'Y'),
 ('bob', 'bobword', 1, 'N'),
+('beeb', 'beebword', 1, 'N'),
 ('ralph', 'ralph123', null, 'N')
 ;
 

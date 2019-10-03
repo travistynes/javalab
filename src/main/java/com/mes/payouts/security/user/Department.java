@@ -6,8 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.JoinColumn;
+import java.util.Collection;
 
 @Entity
 @Table(name = "DEPARTMENT", schema = "MES")
@@ -21,10 +22,14 @@ public class Department {
 	@Column(name="name")
 	private String name;
 
-	@OneToOne(mappedBy="department")
-	private User user;
+	@OneToMany(mappedBy="department")
+	private Collection<User> users;
 
 	public String getName() {
 		return name;
+	}
+
+	public Collection<User> getUsers() {
+		return users;
 	}
 }
