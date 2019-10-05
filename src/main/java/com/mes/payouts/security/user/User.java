@@ -10,6 +10,7 @@ import javax.persistence.SecondaryTable;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -51,8 +52,9 @@ public class User {
 	@Column(name="email", table="user_details")
 	private String email;
 
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="department_id", referencedColumnName="dept_id")
+	@NotFound(action=NotFoundAction.IGNORE)
 	private Department department;
 
 	public String getLoginName() {
@@ -73,5 +75,9 @@ public class User {
 
 	public Department getDepartment() {
 		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 }

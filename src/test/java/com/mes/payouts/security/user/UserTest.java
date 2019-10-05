@@ -31,6 +31,10 @@ public class UserTest {
 
 	@Autowired
 	private MesUserDetailsService userDetailsService;
+
+	@Autowired
+	private UserRepository userRepository;
+
 	
 	// Runs before each test method.
 	@Before
@@ -88,5 +92,29 @@ public class UserTest {
 			String name = u.getLoginName();
 			Assert.assertTrue(name.equals("bob") || name.equals("beeb"));
 		});
+	}
+
+	@Test
+	public void deleteUser() throws Exception {
+		/**
+		 * Deleting user with CascadeType.ALL would also delete the department.
+		 * Since we're using CascadeType.MERGE, that won't happen.
+		 */
+		User bob = userRepository.findByLoginName("bob");
+		userRepository.delete(bob);
+
+		User beeb = userRepository.findByLoginName("beeb");
+		Assert.assertTrue(beeb.getDepartment().getName().equals("Department B"));
+	}
+
+	@Test
+	public void deleteUserDepartment() throws Exception {
+		// Delete the user's department, but not the department itself.
+		User bob = userRepository.findByLoginName("bob");
+		bob.setDepartment(null);
+		userRepository.save(bob);
+
+		User beeb = userRepository.findByLoginName("beeb");
+		Assert.assertTrue(beeb.getDepartment().getName().equals("Department B"));
 	}
 }
