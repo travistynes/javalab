@@ -97,7 +97,8 @@ public class UserTest {
 	@Test
 	public void deleteUser() throws Exception {
 		/**
-		 * Deleting user with CascadeType.ALL would also delete the department.
+		 * Deleting user with CascadeType.ALL on the mapping to department
+		 * would also delete the department.
 		 * Since we're using CascadeType.MERGE, that won't happen.
 		 */
 		User bob = userRepository.findByLoginName("bob");
@@ -109,12 +110,17 @@ public class UserTest {
 
 	@Test
 	public void deleteUserDepartment() throws Exception {
-		// Delete the user's department, but not the department itself.
+		// Verify deleting the user's department, but not the department itself.
 		User bob = userRepository.findByLoginName("bob");
 		bob.setDepartment(null);
 		userRepository.save(bob);
 
 		User beeb = userRepository.findByLoginName("beeb");
 		Assert.assertTrue(beeb.getDepartment().getName().equals("Department B"));
+	}
+
+	@Test
+	public void findUserDepartmentNotNull() throws Exception {
+		Assert.assertEquals(3, userRepository.findByDepartmentNotNull().size());
 	}
 }

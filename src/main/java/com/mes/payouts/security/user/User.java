@@ -11,6 +11,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -52,7 +53,7 @@ public class User {
 	@Column(name="email", table="user_details")
 	private String email;
 
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.MERGE)
 	@JoinColumn(name="department_id", referencedColumnName="dept_id")
 	@NotFound(action=NotFoundAction.IGNORE)
 	private Department department;
