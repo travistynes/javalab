@@ -58,6 +58,13 @@ public class User {
 	@NotFound(action=NotFoundAction.IGNORE)
 	private Department department;
 
+	public User() {
+	}
+
+	public User(String loginName) {
+		this.loginName = loginName;
+	}
+
 	public String getLoginName() {
 		return loginName;
 	}
@@ -72,6 +79,10 @@ public class User {
 
 	public String getEmail() {
 		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Department getDepartment() {

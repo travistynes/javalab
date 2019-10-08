@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @ActiveProfiles({"unittest"})
 @SpringBootTest
+@Transactional // Each test will run in its own transaction and be rolled back by default
 public class UserTest {
 	private static final Logger log = LoggerFactory.getLogger(UserTest.class);
 
@@ -69,7 +70,6 @@ public class UserTest {
 	}
 
 	@Test
-	@Transactional
 	public void joinDepartment() throws Exception {
 		MesUserDetails user = (MesUserDetails)userDetailsService.loadUserByUsername("user");
 		MesUserDetails bob = (MesUserDetails)userDetailsService.loadUserByUsername("bob");
@@ -122,5 +122,21 @@ public class UserTest {
 	@Test
 	public void findUserDepartmentNotNull() throws Exception {
 		Assert.assertEquals(3, userRepository.findByDepartmentNotNull().size());
+	}
+
+	@Test
+	public void addUser() throws Exception {
+		// Create a transient (unmanaged) User instance.
+		User user = new User("tim");
+
+		// Save it. JPA stores it in the database and returns a managed instance.
+		user = userRepository.save(user);
+
+		// Now updates will be persisted automatically.
+		Assert.assertNull(user.getEmail());
+		user.setEmail("tim@example.com");
+
+		user = userRepository.findByLoginName("tim");
+		Assert.assertTrue(user.getEmail().equals("tim@example.com"));
 	}
 }
