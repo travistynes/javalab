@@ -1,0 +1,16 @@
+plugins {
+	id "groovy"
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation "org.codehaus.groovy:groovy-all:2.4.15"
+}
+
+task run(dependsOn: "classes", type: JavaExec) {
+	main = "Main"
+	classpath = sourceSets.main.runtimeClasspath
+}
