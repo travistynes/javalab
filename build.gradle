@@ -8,6 +8,7 @@ repositories {
 
 dependencies {
 	implementation "org.codehaus.groovy:groovy-all:2.4.15"
+	implementation "ch.qos.logback:logback-classic:1.2.3"
 }
 
 task run(dependsOn: "classes", type: JavaExec) {
