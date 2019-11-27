@@ -29,8 +29,7 @@ class Main extends Specification {
 		y++ == 0
 
 		where:
-		// Repeat test n times
-		i << (1..3)
+		i << (1..3) // Repeat test n times
 	}
 
 	def "data table"(a, b) {
