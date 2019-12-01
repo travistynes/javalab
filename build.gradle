@@ -1,7 +1,19 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+
+	dependencies {
+		classpath "com.bmuschko:gradle-tomcat-plugin:2.5"
+	}
+}
+
 plugins {
 	id "groovy"
 	id "war"
 }
+
+apply plugin: "com.bmuschko.tomcat"
 
 repositories {
 	mavenCentral()
@@ -13,18 +25,19 @@ dependencies {
 	implementation "ch.qos.logback:logback-classic:1.2.3"
 	
 	testImplementation "org.springframework:spring-test:5.2.1.RELEASE"
-	testImplementation "javax.servlet:javax.servlet-api:4.0.1"
 	testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.1"
+	testImplementation "javax.servlet:javax.servlet-api:4.0.1"
+	testImplementation "org.eclipse:yasson:1.0.5"
 	testImplementation "org.spockframework:spock-core:1.3-groovy-2.4"
 	testImplementation "cglib:cglib:3.3.0" // For spock mocking classes
 	testImplementation "org.objenesis:objenesis:3.1" // For spock mocking classes
 
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.3.1"
-}
 
-task run(dependsOn: "classes", type: JavaExec) {
-	main = "Main"
-	classpath = sourceSets.main.runtimeClasspath
+	def tomcatVersion = "9.0.1"
+	tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+	"org.apache.tomcat.embed:tomcat-embed-logging-juli:9.0.0.M6",
+	"org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
 }
 
 test {
@@ -34,4 +47,13 @@ test {
 		outputs.upToDateWhen { false }
 		showStandardStreams = true
 	}
+}
+
+// Tomcat plugin: https://github.com/bmuschko/gradle-tomcat-plugin
+// Use: gradle tomcatRun to run exploded webapp, or gradle tomcatRunWar to run war.
+tomcat {
+	httpPort =  8080
+	contextPath = "javalab"
+	httpProtocol = "org.apache.coyote.http11.Http11Nio2Protocol"
+	ajpProtocol  = "org.apache.coyote.ajp.AjpNio2Protocol"
 }
