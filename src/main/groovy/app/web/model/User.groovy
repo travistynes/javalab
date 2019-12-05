@@ -33,6 +33,10 @@ class User {
 		return this.updates;
 	}
 
+	public void setUpdates(int updates) {
+		this.updates = updates;
+	}
+
 	public String toString() {
 		return "name: " + this.name + ", age: " + this.age + ", updates: " + this.updates;
 	}

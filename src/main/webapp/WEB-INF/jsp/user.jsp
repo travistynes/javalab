@@ -9,7 +9,9 @@
 		<div>
 			Viewing user: ${user.name} (updates: ${user.updates})
 		</div>
-		<form:form action="${user.name}" modelAttribute="user" method="POST" htmlEscape="true">
+		<form:form action="." modelAttribute="user" method="POST" htmlEscape="true">
+			<form:hidden path="updates"/>
+
 			<table>
 				<tr>
 					<td><form:label path="name">Name:</form:label></td>
