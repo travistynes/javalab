@@ -19,4 +19,16 @@
 		<property name="suffix" value=""/>
 	</bean>
 
+	<bean class="app.web.model.validator.UserValidator"/>
+
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="defaultEncoding" value="UTF-8"/>
+	  	<property name="alwaysUseMessageFormat" value="true"/>
+		<property name="basenames">
+			<list>
+				<value>classpath:properties/user</value>
+			</list>
+		</property>
+	</bean>
+
 </beans>
