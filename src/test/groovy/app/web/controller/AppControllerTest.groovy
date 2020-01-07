@@ -10,9 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringJUnitWebConfig(locations = "/dispatcher-servlet.xml")
 public class AppControllerTest {
+	private static final Logger log = LoggerFactory.getLogger(AppControllerTest.class);
+
 	private MockMvc mockMvc;
 
 	@Autowired
