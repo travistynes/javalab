@@ -1,0 +1,13 @@
+crnk:
+    # http://localhost:8080/api/v1
+    # Use CRNK's path-prefix instead of defining server.servlet.context-path property.
+    path-prefix: /api/v1
+    default-page-limit: 10
+    security:
+        enabled: false
+
+spring:
+    profiles.active: default
+    application:
+        name: CRNK
+
