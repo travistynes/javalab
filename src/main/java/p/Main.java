@@ -1,35 +1,39 @@
 package p;
 
-import java.util.List;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.endpoint.SecurityContext;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import javax.servlet.SessionTrackingMode;
+import java.util.Collection;
+import java.util.List;
 
 @SpringBootApplication
-@EnableScheduling
 public class Main {
 
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
-
-	@Resource(name = "db1")
-	private JdbcTemplate jdbc;
 
 	public static void main(String[] args) throws Exception {
 		log.info("Application starting.");
@@ -45,11 +49,14 @@ public class Main {
 	private void init() {
 		log.info("Application created. Running post initialization.");
 
-		String ts = jdbc.queryForObject("select current_timestamp ts", (rs, rn) -> {
-			return rs.getString("ts");
+		AuthenticationManager man = (auth -> {
+			return auth;
 		});
 
-		log.info("Connection to db good: " + ts);
+		Authentication req = new UsernamePasswordAuthenticationToken("user", "pass", null);
+		Authentication res = man.authenticate(req);
+		SecurityContextHolder.getContext().setAuthentication(res);
+		log.info("Auth: " + SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
 
 		log.info("Initialization complete.");
 	}
@@ -60,5 +67,28 @@ public class Main {
 	@PreDestroy
 	private void shutdown() {
 		log.info("Application shutdown.");
+	}
+
+	@Configuration
+	@EnableWebSecurity
+	public static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http
+					.authorizeRequests()
+					.anyRequest().authenticated()
+                    .and().logout()
+					.and().httpBasic();
+		}
+
+		@Bean
+		@Override
+		public UserDetailsService userDetailsService() {
+			UserDetails user = User.withDefaultPasswordEncoder().username("bob").password("bob").roles("USER").build();
+			Collection<UserDetails> users = List.of(user);
+			InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager(users);
+
+			return manager;
+		}
 	}
 }
