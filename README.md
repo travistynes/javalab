@@ -1,11 +1,18 @@
 # javalab
 
-Spring boot with maven build.
+Spring boot with gradle build.
+
+Generate gradle wrapper:
+
+```
+gradle wrapper
+```
 
 Run with:
 
 ```
-mvn spring-boot:run
+./gradlew build
+./gradlew bootRun
 ```
 
 ## External configuration

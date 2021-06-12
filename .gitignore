@@ -1,6 +1,13 @@
 /config
+/build/
 /logs
 /target
 *.swp
 tags
 .nb-gradle
+.classpath
+.gradle/
+.idea/
+.project
+.settings/
+javalab.iml
